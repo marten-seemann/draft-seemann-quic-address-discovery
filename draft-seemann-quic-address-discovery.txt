@@ -79,7 +79,7 @@ Table of Contents
      4.1.  REQUEST_ADDRESS
      4.2.  REQUEST_DECLINED
      4.3.  OBSERVED_ADDRESS
-   5.  Address Discvoery
+   5.  Address Discovery
    6.  Security Considerations
    7.  IANA Considerations
    8.  Normative References
@@ -96,7 +96,7 @@ Table of Contents
    unencrypted, and can be observed by on-path observers.  Moving
    address discovery into QUIC's encrypted envelope, it becomes
    invisible to observers. 2.  If QUIC traffic doesn't need to be
-   demultiplexed form STUN traffic, implementations can use enable QUIC
+   demultiplexed from STUN traffic, implementations can use enable QUIC
    bit greasing ([RFC9287]).
 
 2.  Conventions and Definitions
@@ -115,10 +115,10 @@ Table of Contents
    transport parameter MUST treat the receipt of a non-empty value as a
    connection error of type TRANSPORT_PARAMETER_ERROR.
 
-   In order to the use of this extension in 0-RTT packets, the client
-   MUST remember the value of this transport parameter.  If 0-RTT data
-   is accepted by the server, the server MUST not disable this extension
-   on the resumed connection.
+   In order to use this extension in 0-RTT packets, the client MUST
+   remember the value of this transport parameter.  If 0-RTT data is
+   accepted by the server, the server MUST not disable this extension on
+   the resumed connection.
 
 4.  Frames
 
@@ -139,7 +139,7 @@ Table of Contents
    Sequence Number: The sequence number of the request.
 
    REQUEST_ADDRESS frames are ack-eliciting.  When lost, it's the
-   receivers decision if it wants to retransmit the frame.
+   receiver's decision if it wants to retransmit the frame.
 
 4.2.  REQUEST_DECLINED
 
@@ -165,8 +165,8 @@ Table of Contents
 
    The OBSERVED_ADDRESS frame contains the following fields:
 
-   Sequence Number: The sequence number of the request that this
-   response is intended for.
+   Sequence Number: The sequence number of the request for which this
+   response is intended.
 
    IPv4: The IPv4 address.  Only present if the least significant bit of
    the frame type is 0.
@@ -179,14 +179,14 @@ Table of Contents
    OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be
    retransmitted when declared lost.
 
-5.  Address Discvoery
+5.  Address Discovery
 
    An endpoint that wishes to determine its remote address of a path
    sends a REQUEST_ADDRESS frame on that path.  Since the frame is a
    probing frame, the endpoint MAY bundle the frame with other probing
    frames during path validation (Section 8.2 of [RFC9000]).  The
    receiver of the REQUEST_ADDRESS frame SHOULD report the observed
-   address using an OBSERVED_ADDRESS frame.  Since This frame doesn't
+   address using an OBSERVED_ADDRESS frame.  Since this frame doesn't
    need to be sent on the same path, since the sender can associate the
    response with the corresponding request using the sequence number.
 
@@ -195,9 +195,9 @@ Table of Contents
 
 6.  Security Considerations
 
-   Nodes can't necessarily trust the address reported by the peer.
-   Either ask a trusted endpoint, or come up with some validation logic
-   (e.g. by asking multiple untrusted peers and observing if the
+   Nodes can't necessarily trust the address reported by the peer.  They
+   should either ask a trusted endpoint or come up with some validation
+   logic (e.g. by asking multiple untrusted peers and observing if the
    responses are consistent).  This kind of logic is out of scope for
    this document.
 
