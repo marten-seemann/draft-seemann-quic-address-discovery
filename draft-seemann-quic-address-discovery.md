@@ -86,9 +86,9 @@ resumed connection.
 # Frames
 
 This extension defines three frames. These frames MUST only appear in the
-application data packet number frames. They are "probing frames" as defined in
-{{Section 9.1 of RFC9000}}, which allows sending these frames when probing a new
-path without moving to that path.
+application data packet number space. These frames are "probing frames" as
+defined in {{Section 9.1 of RFC9000}}, which allows sending these frames when
+probing a new path without migrating to that path.
 
 ## REQUEST_ADDRESS
 
