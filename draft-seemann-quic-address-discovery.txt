@@ -103,7 +103,7 @@ Table of Contents
        not using STUN might simplify the routing.
 
    3.  If QUIC traffic doesn't need to be demultiplexed from STUN
-       traffic, implementations can use enable QUIC bit greasing
+       traffic, implementations can enable QUIC bit greasing
        ([RFC9287]).
 
 2.  Conventions and Definitions
