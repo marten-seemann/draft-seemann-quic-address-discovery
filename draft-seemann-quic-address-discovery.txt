@@ -81,6 +81,8 @@ Table of Contents
      4.3.  OBSERVED_ADDRESS
    5.  Address Discovery
    6.  Security Considerations
+     6.1.  On the Requester Side
+     6.2.  On the Responder Side
    7.  IANA Considerations
    8.  Normative References
    Acknowledgments
@@ -208,11 +210,22 @@ Table of Contents
 
 6.  Security Considerations
 
-   Nodes can't necessarily trust the address reported by the peer.  They
-   should either ask a trusted endpoint or come up with some validation
+6.1.  On the Requester Side
+
+   In general, nodes cannot be trusted to report the correct address in
+   OBSERVED_ADDRESS frames.  If possible, endpoints might decide to only
+   trusted peers, or if that is not possible, define some validation
    logic (e.g. by asking multiple untrusted peers and observing if the
    responses are consistent).  This kind of logic is out of scope for
    this document.
+
+6.2.  On the Responder Side
+
+   Depending on the routing setup, a node might not be able to observe
+   the peer's reflexive transport address, and attempts to do so might
+   reveal details about the internal network.  In these cases, the node
+   SHOULD NOT enable support the extension, or decline reporting the
+   address using REQUEST_DECLINED frames.
 
 7.  IANA Considerations
 
