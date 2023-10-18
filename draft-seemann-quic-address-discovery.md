@@ -52,8 +52,10 @@ address and port for any QUIC path.
 
 STUN ({{!RFC8489}}) allows nodes to discover their reflexive transport address
 by asking a remote server to report the observed source address. While the QUIC
-({{!RFC9000}}) packet header was designed to allow demultiplexing from STUN,
-moving address discovery into the QUIC layer has a number of advantages:
+({{!RFC9000}}) packet header was designed to allow demultiplexing from STUN
+packets, moving address discovery into the QUIC layer has a number of
+advantages:
+
 1. STUN traffic is unencrypted, and can be observed by on-path observers. Moving
    address discovery into QUIC's encrypted envelope, it becomes invisible to
    observers.
@@ -61,7 +63,7 @@ moving address discovery into the QUIC layer has a number of advantages:
    QUIC connection ID. Depending on the architecture, not using STUN might
    simplify the routing.
 3. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
-   implementations can use enable QUIC bit greasing ({{!RFC9287}}).
+   implementations can enable QUIC bit greasing ({{!RFC9287}}).
 
 
 # Conventions and Definitions
