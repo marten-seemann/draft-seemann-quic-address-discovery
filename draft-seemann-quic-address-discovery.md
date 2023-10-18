@@ -80,7 +80,7 @@ TRANSPORT_PARAMETER_ERROR.
 
 The client MUST remember the value of this transport parameter. This allows
 sending the frames defined by this extension in 0-RTT packets. If 0-RTT data is
-accepted by the server, the server MUST not disable this extension on the
+accepted by the server, the server MUST NOT disable this extension on the
 resumed connection.
 
 # Frames
