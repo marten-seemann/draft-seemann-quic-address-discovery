@@ -73,14 +73,15 @@ advantages:
 # Negotiating Extension Use {#negotiate-extension}
 
 Endpoints advertise their support of the extension by sending the
-address_discovery (0x9f81a173) transport parameter (section 7.4 of {{!RFC9000}})
+address_discovery (0x9f81a173) transport parameter ({{Section 7.4 of RFC9000}})
 with an empty value. Implementations that understand this transport parameter
 MUST treat the receipt of a non-empty value as a connection error of type
 TRANSPORT_PARAMETER_ERROR.
 
-In order to use this extension in 0-RTT packets, the client MUST remember the
-value of this transport parameter. If 0-RTT data is accepted by the server, the
-server MUST not disable this extension on the resumed connection.
+The client MUST remember the value of this transport parameter. This allows
+sending the frames defined by this extension in 0-RTT packets. If 0-RTT data is
+accepted by the server, the server MUST not disable this extension on the
+resumed connection.
 
 # Frames
 
@@ -170,8 +171,7 @@ This kind of logic is out of scope for this document.
 
 # IANA Considerations
 
-This document has no IANA actions.
-
+TODO: fill out registration request for the transport parameter and frame types
 
 --- back
 
