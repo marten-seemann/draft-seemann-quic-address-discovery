@@ -173,6 +173,10 @@ response with the corresponding request using the sequence number.
 The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
 address by sending a REQUEST_DECLINED frame on any path.
 
+When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
+number value that was not sent in a REQUEST_ADDRESS frame before, the receiver
+SHOULD close the connection with a PROTOCOL_VIOLATION error code.
+
 # Security Considerations
 
 ## On the Requester Side
