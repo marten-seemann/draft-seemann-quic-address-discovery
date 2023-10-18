@@ -88,9 +88,11 @@ Table of Contents
 
 1.  Introduction
 
-   While the QUIC ([RFC9000]) packet header was designed to allow
-   demultiplexing from STUN ([RFC8489]), moving address discovery into
-   the QUIC layer has a number of advantages: 1.  STUN traffic is
+   STUN ([RFC8489]) allows nodes to discover their reflexive transport
+   address by asking a remote server to report the observed source
+   address.  While the QUIC ([RFC9000]) packet header was designed to
+   allow demultiplexing from STUN, moving address discovery into the
+   QUIC layer has a number of advantages: 1.  STUN traffic is
    unencrypted, and can be observed by on-path observers.  Moving
    address discovery into QUIC's encrypted envelope, it becomes
    invisible to observers. 2.  If QUIC traffic doesn't need to be
@@ -109,9 +111,9 @@ Table of Contents
 
    Endpoints advertise their support of the extension by sending the
    address_discovery (0x9f81a173) transport parameter (section 7.4 of
-   [RFC9000]) with an empty value.  Implementations that understands
-   this transport parameter MUST treat the receipt of a non-empty value
-   as a connection error of type TRANSPORT_PARAMETER_ERROR.
+   [RFC9000]) with an empty value.  Implementations that understand this
+   transport parameter MUST treat the receipt of a non-empty value as a
+   connection error of type TRANSPORT_PARAMETER_ERROR.
 
    In order to the use of this extension in 0-RTT packets, the client
    MUST remember the value of this transport parameter.  If 0-RTT data

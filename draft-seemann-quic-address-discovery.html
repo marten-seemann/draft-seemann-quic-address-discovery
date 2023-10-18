@@ -1186,9 +1186,10 @@ address and port for any QUIC path.<a href="#section-abstract-1" class="pilcrow"
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">While the QUIC (<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) packet header was designed to allow demultiplexing
-from STUN (<span>[<a href="#RFC8489" class="cite xref">RFC8489</a>]</span>), moving address discovery into the QUIC layer has a
-number of advantages:
+<p id="section-1-1">STUN (<span>[<a href="#RFC8489" class="cite xref">RFC8489</a>]</span>) allows nodes to discover their reflexive transport address
+by asking a remote server to report the observed source address. While the QUIC
+(<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) packet header was designed to allow demultiplexing from STUN,
+moving address discovery into the QUIC layer has a number of advantages:
 1. STUN traffic is unencrypted, and can be observed by on-path observers. Moving
    address discovery into QUIC's encrypted envelope, it becomes invisible to
    observers.
@@ -1214,7 +1215,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       </h2>
 <p id="section-3-1">Endpoints advertise their support of the extension by sending the
 address_discovery (0x9f81a173) transport parameter (section 7.4 of <span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>)
-with an empty value. Implementations that understands this transport parameter
+with an empty value. Implementations that understand this transport parameter
 <span class="bcp14">MUST</span> treat the receipt of a non-empty value as a connection error of type
 TRANSPORT_PARAMETER_ERROR.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">In order to the use of this extension in 0-RTT packets, the client <span class="bcp14">MUST</span> remember
@@ -1229,8 +1230,8 @@ the server <span class="bcp14">MUST</span> not disable this extension on the res
       </h2>
 <p id="section-4-1">This extension defines three frames. These frames <span class="bcp14">MUST</span> only appear in the
 application data packet number frames. They are "probing frames" as defined in
-<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.1" class="relref">Section 9.1</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>, which allows sending these frames when probing a
-new path without moving to that path.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.1" class="relref">Section 9.1</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>, which allows sending these frames when probing a new
+path without moving to that path.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="requestaddress">
 <section id="section-4.1">
         <h3 id="name-request_address">
