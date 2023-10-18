@@ -1363,6 +1363,9 @@ doesn't need to be sent on the same path, since the sender can associate the
 response with the corresponding request using the sequence number.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The receiver of a REQUEST_ADDRESS frame <span class="bcp14">MAY</span> decline to report the observed
 address by sending a REQUEST_DECLINED frame on any path.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
+number value that was not sent in a REQUEST_ADDRESS frame before, the receiver
+<span class="bcp14">SHOULD</span> close the connection with a PROTOCOL_VIOLATION error code.<a href="#section-5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
