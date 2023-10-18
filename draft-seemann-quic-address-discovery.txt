@@ -140,8 +140,10 @@ Table of Contents
 
    Sequence Number: The sequence number of the request.
 
-   REQUEST_ADDRESS frames are ack-eliciting.  When lost, it's the
-   receiver's decision if it wants to retransmit the frame.
+   REQUEST_ADDRESS frames are ack-eliciting.  If lost, it's the sender's
+   decision if it wants to retransmit the frame.  A sender MAY send a
+   new REQUEST_ADDRESS frame with an incremented sequence number
+   instead.
 
 4.2.  REQUEST_DECLINED
 
@@ -154,6 +156,9 @@ Table of Contents
 
    Sequence Number: The sequence number of the request that is being
    declined.
+
+   REQUEST_DECLINED frames are ack-eliciting, and SHOULD be
+   retransmitted if lost.
 
 4.3.  OBSERVED_ADDRESS
 
@@ -179,7 +184,7 @@ Table of Contents
    Port: The port number, in network byte order.
 
    OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be
-   retransmitted when declared lost.
+   retransmitted if lost.
 
 5.  Address Discovery
 
