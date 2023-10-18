@@ -101,7 +101,9 @@ REQUEST_ADDRESS Frame {
 
 The REQUEST_ADDRESS frame contains the following fields:
 
-Sequence Number: The sequence number of the request.
+Sequence Number:
+
+: The sequence number of the request.
 
 REQUEST_ADDRESS frames are ack-eliciting. If lost, it's the sender's decision if
 it wants to retransmit the frame. A sender MAY send a new REQUEST_ADDRESS frame
@@ -118,7 +120,9 @@ REQUEST_DECLINED Frame {
 
 The REQUEST_DECLINED frame contains the following fields:
 
-Sequence Number: The sequence number of the request that is being declined.
+Sequence Number:
+
+: The sequence number of the request that is being declined.
 
 REQUEST_DECLINED frames are ack-eliciting, and SHOULD be retransmitted if lost.
 
@@ -136,16 +140,23 @@ OBSERVED_ADDRESS Frame {
 
 The OBSERVED_ADDRESS frame contains the following fields:
 
-Sequence Number: The sequence number of the request for which this response is
-  intended.
+Sequence Number:
 
-IPv4: The IPv4 address. Only present if the least significant bit of the frame
-  type is 0.
+: The sequence number of the request for which this response is intended.
 
-IPv6: The IPv6 address. Only present if the least significant bit of the frame
-  type is 1.
+IPv4:
 
-Port: The port number, in network byte order.
+: The IPv4 address. Only present if the least significant bit of the frame type
+  is 0.
+
+IPv6:
+
+: The IPv6 address. Only present if the least significant bit of the frame type
+  is 1.
+
+Port:
+
+: The port number, in network byte order.
 
 OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
 
