@@ -1188,16 +1188,25 @@ address and port for any QUIC path.<a href="#section-abstract-1" class="pilcrow"
       </h2>
 <p id="section-1-1">STUN (<span>[<a href="#RFC8489" class="cite xref">RFC8489</a>]</span>) allows nodes to discover their reflexive transport address
 by asking a remote server to report the observed source address. While the QUIC
-(<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) packet header was designed to allow demultiplexing from STUN,
-moving address discovery into the QUIC layer has a number of advantages:
-1. STUN traffic is unencrypted, and can be observed by on-path observers. Moving
-   address discovery into QUIC's encrypted envelope, it becomes invisible to
-   observers.
-2. When located behind a load balancer, QUIC packets may be routed based on the
-   QUIC connection ID. Depending on the architecture, not using STUN might
-   simplify the routing.
-3. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
-   implementations can use enable QUIC bit greasing (<span>[<a href="#RFC9287" class="cite xref">RFC9287</a>]</span>).<a href="#section-1-1" class="pilcrow">¶</a></p>
+(<span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>) packet header was designed to allow demultiplexing from STUN
+packets, moving address discovery into the QUIC layer has a number of
+advantages:<a href="#section-1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1-2">
+<li id="section-1-2.1">
+          <p id="section-1-2.1.1">STUN traffic is unencrypted, and can be observed by on-path observers. Moving
+address discovery into QUIC's encrypted envelope, it becomes invisible to
+observers.<a href="#section-1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-1-2.2">
+          <p id="section-1-2.2.1">When located behind a load balancer, QUIC packets may be routed based on the
+QUIC connection ID. Depending on the architecture, not using STUN might
+simplify the routing.<a href="#section-1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-1-2.3">
+          <p id="section-1-2.3.1">If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
+implementations can use enable QUIC bit greasing (<span>[<a href="#RFC9287" class="cite xref">RFC9287</a>]</span>).<a href="#section-1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
 </section>
 </div>
 <div id="conventions-and-definitions">
