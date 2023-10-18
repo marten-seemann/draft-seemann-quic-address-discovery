@@ -162,20 +162,24 @@ OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
 
 # Address Discovery
 
-An endpoint that wishes to determine its remote address of a path sends a
-REQUEST_ADDRESS frame on that path. Since the frame is a probing frame, the
-endpoint MAY bundle the frame with other probing frames during path validation
-({{Section 8.2 of RFC9000}}). The receiver of the REQUEST_ADDRESS frame SHOULD
-report the observed address using an OBSERVED_ADDRESS frame. Since this frame
-doesn't need to be sent on the same path, since the sender can associate the
-response with the corresponding request using the sequence number.
+An endpoint that wishes to determine the remote address of a path sends a
+REQUEST_ADDRESS frame on that path. The sequence number starts at 0 and is
+incremented for any subsequent request. Since the REQUEST_ADDRESS frame is a
+probing frame, the endpoint MAY bundle it with other probing frames during path
+validation ({{Section 8.2 of RFC9000}}). The receiver of the REQUEST_ADDRESS
+frame SHOULD report the observed address using an OBSERVED_ADDRESS frame. The
+OBSERVED_ADDRESS frame does not need to be sent on the same path, since the
+requester can associate the response with the corresponding request using the
+sequence number.
 
 The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
-address by sending a REQUEST_DECLINED frame on any path.
+address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED also contains
+a sequence number, and therefore may be sent on any path.
 
 When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
-number value that was not sent in a REQUEST_ADDRESS frame before, the receiver
-SHOULD close the connection with a PROTOCOL_VIOLATION error code.
+number value that was not previously sent in a REQUEST_ADDRESS frame before, the
+receiver MUST close the connection with a PROTOCOL_VIOLATION error code if it
+can detect this condition.
 
 # Security Considerations
 
