@@ -22,6 +22,9 @@ venue:
   arch: "https://mailarchive.ietf.org/arch/browse/quic/"
   github: "marten-seemann/draft-seemann-quic-address-discovery"
   latest: "https://marten-seemann.github.io/draft-seemann-quic-address-discovery/draft-seemann-quic-address-discovery.html"
+stand_alone: yes
+smart_quotes: no
+pi: [toc, sortrefs, symrefs]
 
 author:
  -
@@ -36,25 +39,128 @@ informative:
 
 --- abstract
 
-TODO Abstract
+Unless they have out-of-band knowledge, QUIC endpoints have no information about
+their network situation. They neither know their external IP address and port,
+nor do they know if they are directly connected to the internet or if they are
+behind a NAT. This QUIC extension allows nodes to determine their public IP
+address and port for any QUIC path.
 
 
 --- middle
 
 # Introduction
 
-TODO Introduction
+STUN ({{!RFC8489}}) allows nodes to discover their reflexive transport address
+by asking a remote server to report the observed source address. While the QUIC
+({{!RFC9000}}) packet header was designed to allow demultiplexing from STUN,
+moving address discovery into the QUIC layer has a number of advantages:
+1. STUN traffic is unencrypted, and can be observed by on-path observers. Moving
+   address discovery into QUIC's encrypted envelope, it becomes invisible to
+   observers.
+2. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
+   implementations can use enable QUIC bit greasing ({{!RFC9287}}).
 
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
+# Negotiating Extension Use {#negotiate-extension}
+
+Endpoints advertise their support of the extension by sending the
+address_discovery (0x9f81a173) transport parameter (section 7.4 of {{!RFC9000}})
+with an empty value. Implementations that understand this transport parameter
+MUST treat the receipt of a non-empty value as a connection error of type
+TRANSPORT_PARAMETER_ERROR.
+
+In order to use this extension in 0-RTT packets, the client MUST remember the
+value of this transport parameter. If 0-RTT data is accepted by the server, the
+server MUST not disable this extension on the resumed connection.
+
+# Frames
+
+This extension defines three frames. These frames MUST only appear in the
+application data packet number frames. They are "probing frames" as defined in
+{{Section 9.1 of RFC9000}}, which allows sending these frames when probing a new
+path without moving to that path.
+
+## REQUEST_ADDRESS
+
+~~~
+REQUEST_ADDRESS Frame {
+    Type (i) = 0x9f81a0,
+    Sequence Number (i),
+}
+~~~
+
+The REQUEST_ADDRESS frame contains the following fields:
+
+Sequence Number: The sequence number of the request.
+
+REQUEST_ADDRESS frames are ack-eliciting. When lost, it's the receiver's
+decision if it wants to retransmit the frame.
+
+## REQUEST_DECLINED
+
+~~~
+REQUEST_DECLINED Frame {
+    Type (i) = 0x9f81a0,
+    Sequence Number (i),
+}
+~~~
+
+The REQUEST_DECLINED frame contains the following fields:
+
+Sequence Number: The sequence number of the request that is being declined.
+
+
+## OBSERVED_ADDRESS
+
+~~~
+OBSERVED_ADDRESS Frame {
+    Type (i) = 0x9f81a2..0x9f81a3,
+    Sequence Number (i),
+    [ IPv4 (32) ],
+    [ IPv6 (128) ],
+    Port (16),
+}
+~~~
+
+The OBSERVED_ADDRESS frame contains the following fields:
+
+Sequence Number: The sequence number of the request for which this response is
+  intended.
+
+IPv4: The IPv4 address. Only present if the least significant bit of the frame
+  type is 0.
+
+IPv6: The IPv6 address. Only present if the least significant bit of the frame
+  type is 1.
+
+Port: The port number, in network byte order.
+
+OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted when
+declared lost.
+
+# Address Discovery
+
+An endpoint that wishes to determine its remote address of a path sends a
+REQUEST_ADDRESS frame on that path. Since the frame is a probing frame, the
+endpoint MAY bundle the frame with other probing frames during path validation
+({{Section 8.2 of RFC9000}}). The receiver of the REQUEST_ADDRESS frame SHOULD
+report the observed address using an OBSERVED_ADDRESS frame. Since this frame
+doesn't need to be sent on the same path, since the sender can associate the
+response with the corresponding request using the sequence number.
+
+The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
+address by sending a REQUEST_DECLINED frame on any path.
 
 # Security Considerations
 
-TODO Security
-
+Nodes can't necessarily trust the address reported by the peer. They should
+either ask a trusted endpoint or come up with some validation logic (e.g. by
+asking multiple untrusted peers and observing if the responses are consistent).
+This kind of logic is out of scope for this document.
 
 # IANA Considerations
 
