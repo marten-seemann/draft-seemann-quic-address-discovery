@@ -175,10 +175,20 @@ address by sending a REQUEST_DECLINED frame on any path.
 
 # Security Considerations
 
-Nodes can't necessarily trust the address reported by the peer. They should
-either ask a trusted endpoint or come up with some validation logic (e.g. by
-asking multiple untrusted peers and observing if the responses are consistent).
+## On the Requester Side
+
+In general, nodes cannot be trusted to report the correct address in
+OBSERVED_ADDRESS frames. If possible, endpoints might decide to only trusted
+peers, or if that is not possible, define some validation logic (e.g. by asking
+multiple untrusted peers and observing if the responses are consistent).
 This kind of logic is out of scope for this document.
+
+## On the Responder Side
+
+Depending on the routing setup, a node might not be able to observe the peer's
+reflexive transport address, and attempts to do so might reveal details about
+the internal network. In these cases, the node SHOULD NOT enable support the
+extension, or decline reporting the address using REQUEST_DECLINED frames.
 
 # IANA Considerations
 
