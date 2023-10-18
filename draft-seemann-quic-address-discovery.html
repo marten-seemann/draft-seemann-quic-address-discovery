@@ -1226,13 +1226,14 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-negotiating-extension-use" class="section-name selfRef">Negotiating Extension Use</a>
       </h2>
 <p id="section-3-1">Endpoints advertise their support of the extension by sending the
-address_discovery (0x9f81a173) transport parameter (section 7.4 of <span>[<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>)
+address_discovery (0x9f81a173) transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>)
 with an empty value. Implementations that understand this transport parameter
 <span class="bcp14">MUST</span> treat the receipt of a non-empty value as a connection error of type
 TRANSPORT_PARAMETER_ERROR.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">In order to use this extension in 0-RTT packets, the client <span class="bcp14">MUST</span> remember the
-value of this transport parameter. If 0-RTT data is accepted by the server, the
-server <span class="bcp14">MUST</span> not disable this extension on the resumed connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">The client <span class="bcp14">MUST</span> remember the value of this transport parameter. This allows
+sending the frames defined by this extension in 0-RTT packets. If 0-RTT data is
+accepted by the server, the server <span class="bcp14">MUST</span> not disable this extension on the
+resumed connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="frames">
@@ -1343,7 +1344,7 @@ This kind of logic is out of scope for this document.<a href="#section-6-1" clas
       <h2 id="name-iana-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">TODO: fill out registration request for the transport parameter and frame types<a href="#section-7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-normative-references">
