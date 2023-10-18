@@ -1,6 +1,6 @@
-# TODO - Your title
+# QUIC Address Discovery
 
-This is the working area for the individual Internet-Draft, "TODO - Your title".
+This is the working area for the individual Internet-Draft, "QUIC Address Discovery".
 
 * [Editor's Copy](https://marten-seemann.github.io/draft-seemann-quic-address-discovery/#go.draft-seemann-quic-address-discovery.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-seemann-quic-address-discovery)

@@ -1,7 +1,7 @@
 ---
-title: "TODO - Your title"
-abbrev: "TODO - Abbreviation"
-category: info
+title: "QUIC Address Discovery"
+abbrev: "QUIC Address Discovery"
+category: std
 
 docname: draft-seemann-quic-address-discovery-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
@@ -12,9 +12,9 @@ v: 3
 area: "Transport"
 workgroup: "QUIC"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - QUIC
+ - STUN
+ - Address Discovery
 venue:
   group: "QUIC"
   type: "Working Group"
@@ -26,7 +26,7 @@ venue:
 author:
  -
     fullname: "Marten Seemann"
-    organization: Your Organization Here
+    organization: Protocol Labs
     email: "martenseemann@gmail.com"
 
 normative:
