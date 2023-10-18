@@ -13,7 +13,12 @@ Expires: 20 April 2024
 
 Abstract
 
-   TODO Abstract
+   Unless they have out-of-band knowledge, QUIC endpoints have no
+   information about their network situation.  They neither know their
+   external IP address and port, nor do they know if they are directly
+   connected to the internet or if they are behind a NAT.  This QUIC
+   extension allows nodes to determine their public IP address and port
+   for any QUIC path.
 
 About This Document
 
@@ -69,15 +74,28 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+   3.  Negotiating Extension Use
+   4.  Frames
+     4.1.  REQUEST_ADDRESS
+     4.2.  REQUEST_DECLINED
+     4.3.  OBSERVED_ADDRESS
+   5.  Address Discvoery
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  Normative References
    Acknowledgments
    Author's Address
 
 1.  Introduction
 
-   TODO Introduction
+   While the QUIC ([RFC9000]) packet header was designed to allow
+   demultiplexing from STUN ([RFC8489]), moving address discovery into
+   the QUIC layer has a number of advantages: 1.  STUN traffic is
+   unencrypted, and can be observed by on-path observers.  Moving
+   address discovery into QUIC's encrypted envelope, it becomes
+   invisible to observers. 2.  If QUIC traffic doesn't need to be
+   demultiplexed form STUN traffic, implementations can use enable QUIC
+   bit greasing ([RFC9287]).
 
 2.  Conventions and Definitions
 
@@ -87,15 +105,105 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+3.  Negotiating Extension Use
 
-   TODO Security
+   Endpoints advertise their support of the extension by sending the
+   address_discovery (0x9f81a173) transport parameter (section 7.4 of
+   [RFC9000]) with an empty value.  Implementations that understands
+   this transport parameter MUST treat the receipt of a non-empty value
+   as a connection error of type TRANSPORT_PARAMETER_ERROR.
 
-4.  IANA Considerations
+   In order to the use of this extension in 0-RTT packets, the client
+   MUST remember the value of this transport parameter.  If 0-RTT data
+   is accepted by the server, the server MUST not disable this extension
+   on the resumed connection.
+
+4.  Frames
+
+   This extension defines three frames.  These frames MUST only appear
+   in the application data packet number frames.  They are "probing
+   frames" as defined in Section 9.1 of [RFC9000], which allows sending
+   these frames when probing a new path without moving to that path.
+
+4.1.  REQUEST_ADDRESS
+
+   REQUEST_ADDRESS Frame {
+       Type (i) = 0x9f81a0,
+       Sequence Number (i),
+   }
+
+   The REQUEST_ADDRESS frame contains the following fields:
+
+   Sequence Number: The sequence number of the request.
+
+   REQUEST_ADDRESS frames are ack-eliciting.  When lost, it's the
+   receivers decision if it wants to retransmit the frame.
+
+4.2.  REQUEST_DECLINED
+
+   REQUEST_DECLINED Frame {
+       Type (i) = 0x9f81a0,
+       Sequence Number (i),
+   }
+
+   The REQUEST_DECLINED frame contains the following fields:
+
+   Sequence Number: The sequence number of the request that is being
+   declined.
+
+4.3.  OBSERVED_ADDRESS
+
+   OBSERVED_ADDRESS Frame {
+       Type (i) = 0x9f81a2..0x9f81a3,
+       Sequence Number (i),
+       [ IPv4 (32) ],
+       [ IPv6 (128) ],
+       Port (16),
+   }
+
+   The OBSERVED_ADDRESS frame contains the following fields:
+
+   Sequence Number: The sequence number of the request that this
+   response is intended for.
+
+   IPv4: The IPv4 address.  Only present if the least significant bit of
+   the frame type is 0.
+
+   IPv6: The IPv6 address.  Only present if the least significant bit of
+   the frame type is 1.
+
+   Port: The port number, in network byte order.
+
+   OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be
+   retransmitted when declared lost.
+
+5.  Address Discvoery
+
+   An endpoint that wishes to determine its remote address of a path
+   sends a REQUEST_ADDRESS frame on that path.  Since the frame is a
+   probing frame, the endpoint MAY bundle the frame with other probing
+   frames during path validation (Section 8.2 of [RFC9000]).  The
+   receiver of the REQUEST_ADDRESS frame SHOULD report the observed
+   address using an OBSERVED_ADDRESS frame.  Since This frame doesn't
+   need to be sent on the same path, since the sender can associate the
+   response with the corresponding request using the sequence number.
+
+   The receiver of a REQUEST_ADDRESS frame MAY decline to report the
+   observed address by sending a REQUEST_DECLINED frame on any path.
+
+6.  Security Considerations
+
+   Nodes can't necessarily trust the address reported by the peer.
+   Either ask a trusted endpoint, or come up with some validation logic
+   (e.g. by asking multiple untrusted peers and observing if the
+   responses are consistent).  This kind of logic is out of scope for
+   this document.
+
+7.  IANA Considerations
 
    This document has no IANA actions.
 
-5.  Normative References
+8.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -105,6 +213,20 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8489]  Petit-Huguenin, M., Salgueiro, G., Rosenberg, J., Wing,
+              D., Mahy, R., and P. Matthews, "Session Traversal
+              Utilities for NAT (STUN)", RFC 8489, DOI 10.17487/RFC8489,
+              February 2020, <https://www.rfc-editor.org/rfc/rfc8489>.
+
+   [RFC9000]  Iyengar, J., Ed. and M. Thomson, Ed., "QUIC: A UDP-Based
+              Multiplexed and Secure Transport", RFC 9000,
+              DOI 10.17487/RFC9000, May 2021,
+              <https://www.rfc-editor.org/rfc/rfc9000>.
+
+   [RFC9287]  Thomson, M., "Greasing the QUIC Bit", RFC 9287,
+              DOI 10.17487/RFC9287, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9287>.
 
 Acknowledgments
 
