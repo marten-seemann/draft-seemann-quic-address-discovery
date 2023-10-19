@@ -113,7 +113,7 @@ with an incremented sequence number instead.
 
 ~~~
 REQUEST_DECLINED Frame {
-    Type (i) = 0x9f81a0,
+    Type (i) = 0x9f81a1,
     Sequence Number (i),
 }
 ~~~
