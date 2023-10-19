@@ -1201,14 +1201,14 @@ packets, moving address discovery into the QUIC layer has a number of
 advantages:<a href="#section-1-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-1-2">
 <li id="section-1-2.1">
-          <p id="section-1-2.1.1">STUN traffic is unencrypted, and can be observed by on-path observers. Moving
-address discovery into QUIC's encrypted envelope, it becomes invisible to
-observers.<a href="#section-1-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-1-2.1.1">STUN traffic is unencrypted, and can be observed and modified by on-path
+observers. By moving address discovery into QUIC's encrypted envelope it
+becomes invisible to observers.<a href="#section-1-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-2.2">
           <p id="section-1-2.2.1">When located behind a load balancer, QUIC packets may be routed based on the
 QUIC connection ID. Depending on the architecture, not using STUN might
-simplify the routing.<a href="#section-1-2.2.1" class="pilcrow">¶</a></p>
+simplify the routing logic.<a href="#section-1-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-2.3">
           <p id="section-1-2.3.1">If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
@@ -1238,10 +1238,10 @@ address_discovery (0x9f81a173) transport parameter (<span><a href="https://rfc-e
 with an empty value. Implementations that understand this transport parameter
 <span class="bcp14">MUST</span> treat the receipt of a non-empty value as a connection error of type
 TRANSPORT_PARAMETER_ERROR.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">The client <span class="bcp14">MUST</span> remember the value of this transport parameter. This allows
-sending the frames defined by this extension in 0-RTT packets. If 0-RTT data is
-accepted by the server, the server <span class="bcp14">MUST NOT</span> disable this extension on the
-resumed connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-2">When using 0-RTT, both endpoints <span class="bcp14">MUST</span> remember the value of this transport
+parameter. This allows sending the frames defined by this extension in 0-RTT
+packets. If 0-RTT data is accepted by the server, the server <span class="bcp14">MUST NOT</span> disable
+this extension on the resumed connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="frames">
@@ -1251,8 +1251,7 @@ resumed connection.<a href="#section-3-2" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-4-1">This extension defines three frames. These frames <span class="bcp14">MUST</span> only appear in the
 application data packet number space. These frames are "probing frames" as
-defined in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.1" class="relref">Section 9.1</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>, which allows sending these frames when
-probing a new path without migrating to that path.<a href="#section-4-1" class="pilcrow">¶</a></p>
+defined in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.1" class="relref">Section 9.1</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <div id="requestaddress">
 <section id="section-4.1">
         <h3 id="name-request_address">
@@ -1364,10 +1363,10 @@ OBSERVED_ADDRESS frame does not need to be sent on the same path, since the
 requester can associate the response with the corresponding request using the
 sequence number.<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The receiver of a REQUEST_ADDRESS frame <span class="bcp14">MAY</span> decline to report the observed
-address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED also contains
-a sequence number, and therefore may be sent on any path.<a href="#section-5-2" class="pilcrow">¶</a></p>
+address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
+contains a sequence number, and therefore may be sent on any path.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
-number value that was not previously sent in a REQUEST_ADDRESS frame before, the
+number value that was not previously sent in a REQUEST_ADDRESS frame, the
 receiver <span class="bcp14">MUST</span> close the connection with a PROTOCOL_VIOLATION error code if it
 can detect this condition.<a href="#section-5-3" class="pilcrow">¶</a></p>
 </section>
@@ -1383,10 +1382,10 @@ can detect this condition.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-on-the-requester-side" class="section-name selfRef">On the Requester Side</a>
         </h3>
 <p id="section-6.1-1">In general, nodes cannot be trusted to report the correct address in
-OBSERVED_ADDRESS frames. If possible, endpoints might decide to only trusted
-peers, or if that is not possible, define some validation logic (e.g. by asking
-multiple untrusted peers and observing if the responses are consistent).
-This kind of logic is out of scope for this document.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+OBSERVED_ADDRESS frames. If possible, endpoints might decide to only use this
+extension when connecting to trusted peers, or if that is not possible, define
+some validation logic (e.g. by asking multiple untrusted peers and observing if
+the responses are consistent). This logic is out of scope for this document.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="on-the-responder-side">
