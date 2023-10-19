@@ -1357,18 +1357,22 @@ is 1.<a href="#section-4.3-3.6.1" class="pilcrow">¶</a></p>
 REQUEST_ADDRESS frame on that path. The sequence number starts at 0 and is
 incremented for any subsequent request. Since the REQUEST_ADDRESS frame is a
 probing frame, the endpoint <span class="bcp14">MAY</span> bundle it with other probing frames during path
-validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>). The receiver of the REQUEST_ADDRESS
-frame <span class="bcp14">SHOULD</span> report the observed address using an OBSERVED_ADDRESS frame. The
-OBSERVED_ADDRESS frame does not need to be sent on the same path, since the
-requester can associate the response with the corresponding request using the
-sequence number.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">The receiver of a REQUEST_ADDRESS frame <span class="bcp14">MAY</span> decline to report the observed
+validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>).<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The receiver of the REQUEST_ADDRESS frame <span class="bcp14">SHOULD</span> report the observed address
+using an OBSERVED_ADDRESS frame. The OBSERVED_ADDRESS frame does not need to be
+sent on the same path, since the requester can associate the response with the
+corresponding request using the sequence number.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The receiver of a REQUEST_ADDRESS frame <span class="bcp14">MAY</span> decline to report the observed
 address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
-contains a sequence number, and therefore may be sent on any path.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
+contains a sequence number, and therefore may be sent on any path.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">The sender <span class="bcp14">MAY</span> send a REQUEST_ADDRESS frame for the same path after a some time
+has elapsed. This allows it to detect when a NAT rebinding has happened. To
+speed up the discovery, it <span class="bcp14">MAY</span> also send another REQUEST_ADDRESS frame when the
+peer changes the connection ID used on the path.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
 number value that was not previously sent in a REQUEST_ADDRESS frame, the
 receiver <span class="bcp14">MUST</span> close the connection with a PROTOCOL_VIOLATION error code if it
-can detect this condition.<a href="#section-5-3" class="pilcrow">¶</a></p>
+can detect this condition.<a href="#section-5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
