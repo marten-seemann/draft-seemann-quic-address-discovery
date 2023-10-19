@@ -56,15 +56,14 @@ by asking a remote server to report the observed source address. While the QUIC
 packets, moving address discovery into the QUIC layer has a number of
 advantages:
 
-1. STUN traffic is unencrypted, and can be observed by on-path observers. Moving
-   address discovery into QUIC's encrypted envelope, it becomes invisible to
-   observers.
+1. STUN traffic is unencrypted, and can be observed and modified by on-path
+   observers. By moving address discovery into QUIC's encrypted envelope it
+   becomes invisible to observers.
 2. When located behind a load balancer, QUIC packets may be routed based on the
    QUIC connection ID. Depending on the architecture, not using STUN might
-   simplify the routing.
+   simplify the routing logic.
 3. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
    implementations can enable QUIC bit greasing ({{!RFC9287}}).
-
 
 # Conventions and Definitions
 
@@ -78,17 +77,16 @@ with an empty value. Implementations that understand this transport parameter
 MUST treat the receipt of a non-empty value as a connection error of type
 TRANSPORT_PARAMETER_ERROR.
 
-The client MUST remember the value of this transport parameter. This allows
-sending the frames defined by this extension in 0-RTT packets. If 0-RTT data is
-accepted by the server, the server MUST NOT disable this extension on the
-resumed connection.
+When using 0-RTT, both endpoints MUST remember the value of this transport
+parameter. This allows sending the frames defined by this extension in 0-RTT
+packets. If 0-RTT data is accepted by the server, the server MUST NOT disable
+this extension on the resumed connection.
 
 # Frames
 
 This extension defines three frames. These frames MUST only appear in the
 application data packet number space. These frames are "probing frames" as
-defined in {{Section 9.1 of RFC9000}}, which allows sending these frames when
-probing a new path without migrating to that path.
+defined in {{Section 9.1 of RFC9000}}.
 
 ## REQUEST_ADDRESS
 
@@ -173,11 +171,11 @@ requester can associate the response with the corresponding request using the
 sequence number.
 
 The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
-address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED also contains
-a sequence number, and therefore may be sent on any path.
+address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
+contains a sequence number, and therefore may be sent on any path.
 
 When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
-number value that was not previously sent in a REQUEST_ADDRESS frame before, the
+number value that was not previously sent in a REQUEST_ADDRESS frame, the
 receiver MUST close the connection with a PROTOCOL_VIOLATION error code if it
 can detect this condition.
 
@@ -186,10 +184,10 @@ can detect this condition.
 ## On the Requester Side
 
 In general, nodes cannot be trusted to report the correct address in
-OBSERVED_ADDRESS frames. If possible, endpoints might decide to only trusted
-peers, or if that is not possible, define some validation logic (e.g. by asking
-multiple untrusted peers and observing if the responses are consistent).
-This kind of logic is out of scope for this document.
+OBSERVED_ADDRESS frames. If possible, endpoints might decide to only use this
+extension when connecting to trusted peers, or if that is not possible, define
+some validation logic (e.g. by asking multiple untrusted peers and observing if
+the responses are consistent). This logic is out of scope for this document.
 
 ## On the Responder Side
 
