@@ -4,8 +4,8 @@
 
 QUIC                                                          M. Seemann
 Internet-Draft                                             Protocol Labs
-Intended status: Standards Track                         18 October 2023
-Expires: 20 April 2024
+Intended status: Standards Track                         19 October 2023
+Expires: 21 April 2024
 
 
                          QUIC Address Discovery
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2024.
+   This Internet-Draft will expire on 21 April 2024.
 
 Copyright Notice
 
@@ -156,7 +156,7 @@ Table of Contents
 4.2.  REQUEST_DECLINED
 
    REQUEST_DECLINED Frame {
-       Type (i) = 0x9f81a0,
+       Type (i) = 0x9f81a1,
        Sequence Number (i),
    }
 
