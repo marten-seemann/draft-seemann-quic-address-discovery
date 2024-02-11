@@ -13,26 +13,26 @@ nor do they know if they are directly connected to the internet or if they are
 behind a NAT. This QUIC extension allows nodes to determine their public IP
 address and port for any QUIC path. 
     " name="description">
-<meta content="xml2rfc 3.18.2" name="generator">
+<meta content="xml2rfc 3.19.2" name="generator">
 <meta content="QUIC" name="keyword">
 <meta content="STUN" name="keyword">
 <meta content="Address Discovery" name="keyword">
 <meta content="draft-seemann-quic-address-discovery-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.18.2
+  xml2rfc 3.19.2
     Python 3.11.6
-    ConfigArgParse 1.5.3
+    ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 3.11.0
+    platformdirs 4.2.0
     pycountry 22.3.5
-    PyYAML 6.0
+    PyYAML 6.0.1
     requests 2.31.0
-    setuptools 67.7.2
+    setuptools 68.2.2
     six 1.16.0
-    wcwidth 0.2.8
+    wcwidth 0.2.13
 -->
 <link href="draft-seemann-quic-address-discovery.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1031,11 +1031,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">QUIC Address Discovery</td>
-<td class="right">October 2023</td>
+<td class="right">February 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Seemann</td>
-<td class="center">Expires 21 April 2024</td>
+<td class="center">Expires 14 August 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1048,12 +1048,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-seemann-quic-address-discovery-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2023-10-19" class="published">19 October 2023</time>
+<time datetime="2024-02-11" class="published">11 February 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-04-21">21 April 2024</time></dd>
+<dd class="expires"><time datetime="2024-08-14">14 August 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1107,7 +1107,7 @@ address and port for any QUIC path.<a href="#section-abstract-1" class="pilcrow"
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 21 April 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1116,7 +1116,7 @@ address and port for any QUIC path.<a href="#section-abstract-1" class="pilcrow"
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2023 IETF Trust and the persons identified as the
+            Copyright (c) 2024 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1261,21 +1261,21 @@ defined in <span><a href="https://rfc-editor.org/rfc/rfc9000#section-9.1" class=
 <pre>
 REQUEST_ADDRESS Frame {
     Type (i) = 0x9f81a0,
-    Sequence Number (i),
+    Request ID (i),
 }
 </pre><a href="#section-4.1-1" class="pilcrow">¶</a>
 </div>
 <p id="section-4.1-2">The REQUEST_ADDRESS frame contains the following fields:<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4.1-3">
-          <dt id="section-4.1-3.1">Sequence Number:</dt>
+          <dt id="section-4.1-3.1">Request ID:</dt>
           <dd style="margin-left: 1.5em" id="section-4.1-3.2">
-            <p id="section-4.1-3.2.1">The sequence number of the request.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.1-3.2.1">A variable-length integer encoding the request identifier of the request.<a href="#section-4.1-3.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
 <p id="section-4.1-4">REQUEST_ADDRESS frames are ack-eliciting. If lost, it's the sender's decision if
 it wants to retransmit the frame. A sender <span class="bcp14">MAY</span> send a new REQUEST_ADDRESS frame
-with an incremented sequence number instead.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+instead.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="requestdeclined">
@@ -1287,15 +1287,15 @@ with an incremented sequence number instead.<a href="#section-4.1-4" class="pilc
 <pre>
 REQUEST_DECLINED Frame {
     Type (i) = 0x9f81a1,
-    Sequence Number (i),
+    Request ID (i),
 }
 </pre><a href="#section-4.2-1" class="pilcrow">¶</a>
 </div>
 <p id="section-4.2-2">The REQUEST_DECLINED frame contains the following fields:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4.2-3">
-          <dt id="section-4.2-3.1">Sequence Number:</dt>
+          <dt id="section-4.2-3.1">Request ID:</dt>
           <dd style="margin-left: 1.5em" id="section-4.2-3.2">
-            <p id="section-4.2-3.2.1">The sequence number of the request that is being declined.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.2-3.2.1">The request ID of the request that is being declined.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
 </dd>
         <dd class="break"></dd>
 </dl>
@@ -1311,7 +1311,7 @@ REQUEST_DECLINED Frame {
 <pre>
 OBSERVED_ADDRESS Frame {
     Type (i) = 0x9f81a2..0x9f81a3,
-    Sequence Number (i),
+    Request ID (i),
     [ IPv4 (32) ],
     [ IPv6 (128) ],
     Port (16),
@@ -1320,9 +1320,9 @@ OBSERVED_ADDRESS Frame {
 </div>
 <p id="section-4.3-2">The OBSERVED_ADDRESS frame contains the following fields:<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <span class="break"></span><dl class="dlParallel" id="section-4.3-3">
-          <dt id="section-4.3-3.1">Sequence Number:</dt>
+          <dt id="section-4.3-3.1">Request ID:</dt>
           <dd style="margin-left: 1.5em" id="section-4.3-3.2">
-            <p id="section-4.3-3.2.1">The sequence number of the request for which this response is intended.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-4.3-3.2.1">The request identifier of the request for which this response is intended.<a href="#section-4.3-3.2.1" class="pilcrow">¶</a></p>
 </dd>
           <dd class="break"></dd>
 <dt id="section-4.3-3.3">IPv4:</dt>
@@ -1354,25 +1354,24 @@ is 1.<a href="#section-4.3-3.6.1" class="pilcrow">¶</a></p>
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-address-discovery" class="section-name selfRef">Address Discovery</a>
       </h2>
 <p id="section-5-1">An endpoint that wishes to determine the remote address of a path sends a
-REQUEST_ADDRESS frame on that path. The sequence number starts at 0 and is
-incremented for any subsequent request. Since the REQUEST_ADDRESS frame is a
+REQUEST_ADDRESS frame on that path. Since the REQUEST_ADDRESS frame is a
 probing frame, the endpoint <span class="bcp14">MAY</span> bundle it with other probing frames during path
 validation (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>).<a href="#section-5-1" class="pilcrow">¶</a></p>
 <p id="section-5-2">The receiver of the REQUEST_ADDRESS frame <span class="bcp14">SHOULD</span> report the observed address
 using an OBSERVED_ADDRESS frame. The OBSERVED_ADDRESS frame does not need to be
 sent on the same path, since the requester can associate the response with the
-corresponding request using the sequence number.<a href="#section-5-2" class="pilcrow">¶</a></p>
+corresponding request using the request ID.<a href="#section-5-2" class="pilcrow">¶</a></p>
 <p id="section-5-3">The receiver of a REQUEST_ADDRESS frame <span class="bcp14">MAY</span> decline to report the observed
 address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
-contains a sequence number, and therefore may be sent on any path.<a href="#section-5-3" class="pilcrow">¶</a></p>
+contains a request ID, and therefore may be sent on any path.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <p id="section-5-4">The sender <span class="bcp14">MAY</span> send a REQUEST_ADDRESS frame for the same path after a some time
 has elapsed. This allows it to detect when a NAT rebinding has happened. To
 speed up the discovery, it <span class="bcp14">MAY</span> also send another REQUEST_ADDRESS frame when the
 peer changes the connection ID used on the path.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
-number value that was not previously sent in a REQUEST_ADDRESS frame, the
-receiver <span class="bcp14">MUST</span> close the connection with a PROTOCOL_VIOLATION error code if it
-can detect this condition.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-5">When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a request
+ID value that was not previously sent in a REQUEST_ADDRESS frame, the receiver
+<span class="bcp14">MUST</span> close the connection with a PROTOCOL_VIOLATION error code if it can
+detect this condition.<a href="#section-5-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">

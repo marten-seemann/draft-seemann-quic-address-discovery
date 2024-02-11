@@ -4,8 +4,8 @@
 
 QUIC                                                          M. Seemann
 Internet-Draft                                             Protocol Labs
-Intended status: Standards Track                         19 October 2023
-Expires: 21 April 2024
+Intended status: Standards Track                        11 February 2024
+Expires: 14 August 2024
 
 
                          QUIC Address Discovery
@@ -54,11 +54,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 April 2024.
+   This Internet-Draft will expire on 14 August 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -139,29 +139,28 @@ Table of Contents
 
    REQUEST_ADDRESS Frame {
        Type (i) = 0x9f81a0,
-       Sequence Number (i),
+       Request ID (i),
    }
 
    The REQUEST_ADDRESS frame contains the following fields:
 
-   Sequence Number:  The sequence number of the request.
+   Request ID:  A variable-length integer encoding the request
+      identifier of the request.
 
    REQUEST_ADDRESS frames are ack-eliciting.  If lost, it's the sender's
    decision if it wants to retransmit the frame.  A sender MAY send a
-   new REQUEST_ADDRESS frame with an incremented sequence number
-   instead.
+   new REQUEST_ADDRESS frame instead.
 
 4.2.  REQUEST_DECLINED
 
    REQUEST_DECLINED Frame {
        Type (i) = 0x9f81a1,
-       Sequence Number (i),
+       Request ID (i),
    }
 
    The REQUEST_DECLINED frame contains the following fields:
 
-   Sequence Number:  The sequence number of the request that is being
-      declined.
+   Request ID:  The request ID of the request that is being declined.
 
    REQUEST_DECLINED frames are ack-eliciting, and SHOULD be
    retransmitted if lost.
@@ -170,7 +169,7 @@ Table of Contents
 
    OBSERVED_ADDRESS Frame {
        Type (i) = 0x9f81a2..0x9f81a3,
-       Sequence Number (i),
+       Request ID (i),
        [ IPv4 (32) ],
        [ IPv6 (128) ],
        Port (16),
@@ -178,7 +177,7 @@ Table of Contents
 
    The OBSERVED_ADDRESS frame contains the following fields:
 
-   Sequence Number:  The sequence number of the request for which this
+   Request ID:  The request identifier of the request for which this
       response is intended.
 
    IPv4:  The IPv4 address.  Only present if the least significant bit
@@ -195,8 +194,7 @@ Table of Contents
 5.  Address Discovery
 
    An endpoint that wishes to determine the remote address of a path
-   sends a REQUEST_ADDRESS frame on that path.  The sequence number
-   starts at 0 and is incremented for any subsequent request.  Since the
+   sends a REQUEST_ADDRESS frame on that path.  Since the
    REQUEST_ADDRESS frame is a probing frame, the endpoint MAY bundle it
    with other probing frames during path validation (Section 8.2 of
    [RFC9000]).
@@ -205,12 +203,12 @@ Table of Contents
    address using an OBSERVED_ADDRESS frame.  The OBSERVED_ADDRESS frame
    does not need to be sent on the same path, since the requester can
    associate the response with the corresponding request using the
-   sequence number.
+   request ID.
 
    The receiver of a REQUEST_ADDRESS frame MAY decline to report the
    observed address by sending a REQUEST_DECLINED frame.  The
-   REQUEST_DECLINED frame also contains a sequence number, and therefore
-   may be sent on any path.
+   REQUEST_DECLINED frame also contains a request ID, and therefore may
+   be sent on any path.
 
    The sender MAY send a REQUEST_ADDRESS frame for the same path after a
    some time has elapsed.  This allows it to detect when a NAT rebinding
@@ -219,8 +217,8 @@ Table of Contents
    the path.
 
    When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a
-   sequence number value that was not previously sent in a
-   REQUEST_ADDRESS frame, the receiver MUST close the connection with a
+   request ID value that was not previously sent in a REQUEST_ADDRESS
+   frame, the receiver MUST close the connection with a
    PROTOCOL_VIOLATION error code if it can detect this condition.
 
 6.  Security Considerations
