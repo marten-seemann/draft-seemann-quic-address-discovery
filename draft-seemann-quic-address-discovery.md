@@ -93,34 +93,34 @@ defined in {{Section 9.1 of RFC9000}}.
 ~~~
 REQUEST_ADDRESS Frame {
     Type (i) = 0x9f81a0,
-    Sequence Number (i),
+    Request ID (i),
 }
 ~~~
 
 The REQUEST_ADDRESS frame contains the following fields:
 
-Sequence Number:
+Request ID:
 
-: The sequence number of the request.
+: A variable-length integer encoding the request identifier of the request.
 
 REQUEST_ADDRESS frames are ack-eliciting. If lost, it's the sender's decision if
 it wants to retransmit the frame. A sender MAY send a new REQUEST_ADDRESS frame
-with an incremented sequence number instead.
+instead.
 
 ## REQUEST_DECLINED
 
 ~~~
 REQUEST_DECLINED Frame {
     Type (i) = 0x9f81a1,
-    Sequence Number (i),
+    Request ID (i),
 }
 ~~~
 
 The REQUEST_DECLINED frame contains the following fields:
 
-Sequence Number:
+Request ID:
 
-: The sequence number of the request that is being declined.
+: The request ID of the request that is being declined.
 
 REQUEST_DECLINED frames are ack-eliciting, and SHOULD be retransmitted if lost.
 
@@ -129,7 +129,7 @@ REQUEST_DECLINED frames are ack-eliciting, and SHOULD be retransmitted if lost.
 ~~~
 OBSERVED_ADDRESS Frame {
     Type (i) = 0x9f81a2..0x9f81a3,
-    Sequence Number (i),
+    Request ID (i),
     [ IPv4 (32) ],
     [ IPv6 (128) ],
     Port (16),
@@ -138,9 +138,9 @@ OBSERVED_ADDRESS Frame {
 
 The OBSERVED_ADDRESS frame contains the following fields:
 
-Sequence Number:
+Request ID:
 
-: The sequence number of the request for which this response is intended.
+: The request identifier of the request for which this response is intended.
 
 IPv4:
 
@@ -161,29 +161,28 @@ OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
 # Address Discovery
 
 An endpoint that wishes to determine the remote address of a path sends a
-REQUEST_ADDRESS frame on that path. The sequence number starts at 0 and is
-incremented for any subsequent request. Since the REQUEST_ADDRESS frame is a
+REQUEST_ADDRESS frame on that path. Since the REQUEST_ADDRESS frame is a
 probing frame, the endpoint MAY bundle it with other probing frames during path
 validation ({{Section 8.2 of RFC9000}}).
 
 The receiver of the REQUEST_ADDRESS frame SHOULD report the observed address
 using an OBSERVED_ADDRESS frame. The OBSERVED_ADDRESS frame does not need to be
 sent on the same path, since the requester can associate the response with the
-corresponding request using the sequence number.
+corresponding request using the request ID.
 
 The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
 address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
-contains a sequence number, and therefore may be sent on any path.
+contains a request ID, and therefore may be sent on any path.
 
 The sender MAY send a REQUEST_ADDRESS frame for the same path after a some time
 has elapsed. This allows it to detect when a NAT rebinding has happened. To
 speed up the discovery, it MAY also send another REQUEST_ADDRESS frame when the
 peer changes the connection ID used on the path.
 
-When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a sequence
-number value that was not previously sent in a REQUEST_ADDRESS frame, the
-receiver MUST close the connection with a PROTOCOL_VIOLATION error code if it
-can detect this condition.
+When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a request
+ID value that was not previously sent in a REQUEST_ADDRESS frame, the receiver
+MUST close the connection with a PROTOCOL_VIOLATION error code if it can
+detect this condition.
 
 # Security Considerations
 
