@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-11T00:01:34.602491+00:00",
+  "timestamp": "2024-02-13T00:01:19.467743+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -133,15 +133,15 @@
       "id": "I_kwDOKhxVW850a4HW",
       "title": "Sequence number or just unique?",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/5",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Because the sequence number is simply echoed, it might not need to be monotonic.  It should be enough to just have it be unique.  Obviously, a counter is the easiest method to use, but given typical usage, it might be OK to send the same value always.  If the endpoint that responds does so unconditionally (without collapsing duplicates, see #4), then this will probably be enough for most endpoints to get what they need (that is, the set of reflexive addresses they have).",
       "createdAt": "2023-10-19T23:25:30Z",
-      "updatedAt": "2023-10-20T01:59:17Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-11T01:53:51Z",
+      "closedAt": "2024-02-11T01:53:51Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -254,6 +254,34 @@
       "mergedBy": "marten-seemann",
       "mergeCommit": {
         "oid": "5ceddb699fb96f110a1d4b4b68fc490d10eaa040"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOKhxVW85mkVuU",
+      "title": "change sequence number to request ID",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/8",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "There's no reason this needs to be sequential.\r\n\r\nFixes #5.",
+      "createdAt": "2024-02-11T01:52:19Z",
+      "updatedAt": "2024-02-11T01:53:51Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "5ceddb699fb96f110a1d4b4b68fc490d10eaa040",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "request-id",
+      "headRefOid": "8d5c116ee69a3ea3a9d43a73d9926387586fa823",
+      "closedAt": "2024-02-11T01:53:50Z",
+      "mergedAt": "2024-02-11T01:53:50Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "e2ce06edb4a4949af1230ffcc9e458a83a6d1336"
       },
       "comments": [],
       "reviews": []
