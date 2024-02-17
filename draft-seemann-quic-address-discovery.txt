@@ -3,9 +3,9 @@
 
 
 QUIC                                                          M. Seemann
-Internet-Draft                                             Protocol Labs
-Intended status: Standards Track                        11 February 2024
-Expires: 14 August 2024
+Internet-Draft                                          17 February 2024
+Intended status: Standards Track                                        
+Expires: 20 August 2024
 
 
                          QUIC Address Discovery
@@ -54,7 +54,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 August 2024.
+   This Internet-Draft will expire on 20 August 2024.
 
 Copyright Notice
 
@@ -277,5 +277,4 @@ Acknowledgments
 Author's Address
 
    Marten Seemann
-   Protocol Labs
    Email: martenseemann@gmail.com
