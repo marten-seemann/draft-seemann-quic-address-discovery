@@ -29,7 +29,6 @@ pi: [toc, sortrefs, symrefs]
 author:
  -
     fullname: "Marten Seemann"
-    organization: Protocol Labs
     email: "martenseemann@gmail.com"
 
 normative:
