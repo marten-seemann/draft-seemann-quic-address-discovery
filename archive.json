@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-15T00:01:21.646187+00:00",
+  "timestamp": "2024-02-18T00:01:19.409190+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -282,6 +282,34 @@
       "mergedBy": "marten-seemann",
       "mergeCommit": {
         "oid": "e2ce06edb4a4949af1230ffcc9e458a83a6d1336"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOKhxVW85nJqJl",
+      "title": "remove Marten's affiliation",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/9",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-17T03:07:33Z",
+      "updatedAt": "2024-02-17T03:08:54Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "e2ce06edb4a4949af1230ffcc9e458a83a6d1336",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "remove-protocol-labs",
+      "headRefOid": "3c1898be45870b926442134c3741a5c6fd4051cb",
+      "closedAt": "2024-02-17T03:08:54Z",
+      "mergedAt": "2024-02-17T03:08:54Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "fefbb97f06ab436c67889d132cd1ce8b4ebaf20c"
       },
       "comments": [],
       "reviews": []
