@@ -71,57 +71,29 @@ advantages:
 # Negotiating Extension Use {#negotiate-extension}
 
 Endpoints advertise their support of the extension by sending the
-address_discovery (0x9f81a173) transport parameter ({{Section 7.4 of RFC9000}})
-with an empty value. Implementations that understand this transport parameter
-MUST treat the receipt of a non-empty value as a connection error of type
+address_discovery (0x9f81a174) transport parameter ({{Section 7.4 of RFC9000}})
+with a variable-length integer value. The value determines the behavior with
+respect to address discovery:
+
+* 0: The node is willing to provide address observations to its peer, but is not
+  interested in receiving address observations itself.
+* 1: The node is interested in receiving address observations, but it is not
+  willing to provide address observations itself.
+* 2: The node is interested in receiving address observations, and it is willing
+  to provide address observations.
+
+Implementations that understand this transport parameter MUST treat the receipt
+of any other value than these as a connection error of type
 TRANSPORT_PARAMETER_ERROR.
 
 When using 0-RTT, both endpoints MUST remember the value of this transport
-parameter. This allows sending the frames defined by this extension in 0-RTT
+parameter. This allows sending the frame defined by this extension in 0-RTT
 packets. If 0-RTT data is accepted by the server, the server MUST NOT disable
-this extension on the resumed connection.
+this extension or change the value on the resumed connection.
 
 # Frames
 
-This extension defines three frames. These frames MUST only appear in the
-application data packet number space. These frames are "probing frames" as
-defined in {{Section 9.1 of RFC9000}}.
-
-## REQUEST_ADDRESS
-
-~~~
-REQUEST_ADDRESS Frame {
-    Type (i) = 0x9f81a0,
-    Request ID (i),
-}
-~~~
-
-The REQUEST_ADDRESS frame contains the following fields:
-
-Request ID:
-
-: A variable-length integer encoding the request identifier of the request.
-
-REQUEST_ADDRESS frames are ack-eliciting. If lost, it's the sender's decision if
-it wants to retransmit the frame. A sender MAY send a new REQUEST_ADDRESS frame
-instead.
-
-## REQUEST_DECLINED
-
-~~~
-REQUEST_DECLINED Frame {
-    Type (i) = 0x9f81a1,
-    Request ID (i),
-}
-~~~
-
-The REQUEST_DECLINED frame contains the following fields:
-
-Request ID:
-
-: The request ID of the request that is being declined.
-
-REQUEST_DECLINED frames are ack-eliciting, and SHOULD be retransmitted if lost.
+This extension defines the OBSERVED_ADDRESS frame.
 
 ## OBSERVED_ADDRESS
 
@@ -155,50 +127,52 @@ Port:
 
 : The port number, in network byte order.
 
+This frame MUST only appear in the handshake and in the application data packet
+number space. It is a "probing frame" as defined in {{Section 9.1 of RFC9000}}.
 OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
+
+An endpoint MUST NOT send an OBSERVED_ADDRESS frame to a node that did not
+request the receipt of address observations as described in
+{{negotiate-extension}}. A node that did not request the receipt of address
+observations MUST close the connection with a PROTOCOL_VIOLATION error if it
+receives an OBSERVED_ADDRESS frame.
 
 # Address Discovery
 
-An endpoint that wishes to determine the remote address of a path sends a
-REQUEST_ADDRESS frame on that path. Since the REQUEST_ADDRESS frame is a
-probing frame, the endpoint MAY bundle it with other probing frames during path
-validation ({{Section 8.2 of RFC9000}}).
+An endpoint that negotiated (see {{negotiate-extension}}) to provide address
+observations to the peer MUST send an OBSERVED_ADDRESS frame with the observed
+network address on every new path. This also applies to the path used for the
+QUIC handshake.
 
-The receiver of the REQUEST_ADDRESS frame SHOULD report the observed address
-using an OBSERVED_ADDRESS frame. The OBSERVED_ADDRESS frame does not need to be
-sent on the same path, since the requester can associate the response with the
-corresponding request using the request ID.
+The OBSERVED_ADDRESS frame SHOULD be sent as early as possible. During the
+handshake, an endpoint SHOULD prioritize frames that lead to handshake progress
+(CRYPTO and ACK frames in particular) over sending of the OBSERVED_ADDRESS
+frame.
 
-The receiver of a REQUEST_ADDRESS frame MAY decline to report the observed
-address by sending a REQUEST_DECLINED frame. The REQUEST_DECLINED frame also
-contains a request ID, and therefore may be sent on any path.
+For paths used after completion of the handshake, endpoints SHOULD bundle the
+OBSERVED_ADDRESS frame with probing packets. This is possible, since the frame
+is defined to be a probing frame ({{Section 8.2 of RFC9000}}).
 
-The sender MAY send a REQUEST_ADDRESS frame for the same path after a some time
-has elapsed. This allows it to detect when a NAT rebinding has happened. To
-speed up the discovery, it MAY also send another REQUEST_ADDRESS frame when the
-peer changes the connection ID used on the path.
-
-When receiving an OBSERVED_ADDRESS or a REQUEST_DECLINED frame with a request
-ID value that was not previously sent in a REQUEST_ADDRESS frame, the receiver
-MUST close the connection with a PROTOCOL_VIOLATION error code if it can
-detect this condition.
+The sender SHOULD send an OBSERVED_ADDRESS frame when it detects a change in
+the remote address, e.g. in the case of NAT rebindings.
 
 # Security Considerations
 
 ## On the Requester Side
 
 In general, nodes cannot be trusted to report the correct address in
-OBSERVED_ADDRESS frames. If possible, endpoints might decide to only use this
-extension when connecting to trusted peers, or if that is not possible, define
-some validation logic (e.g. by asking multiple untrusted peers and observing if
-the responses are consistent). This logic is out of scope for this document.
+OBSERVED_ADDRESS frames. If possible, endpoints might decide to only request
+address observations when connecting to trusted peers, or if that is not
+possible, define some validation logic (e.g. by asking multiple untrusted peers
+and observing if the responses are consistent). This logic is out of scope for
+this document.
 
 ## On the Responder Side
 
 Depending on the routing setup, a node might not be able to observe the peer's
 reflexive transport address, and attempts to do so might reveal details about
-the internal network. In these cases, the node SHOULD NOT enable support the
-extension, or decline reporting the address using REQUEST_DECLINED frames.
+the internal network. In these cases, the node SHOULD NOT offer to provide
+address observations.
 
 # IANA Considerations
 
