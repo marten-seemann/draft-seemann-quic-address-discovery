@@ -78,7 +78,7 @@ respect to address discovery:
 * 0: The node is willing to provide address observations to its peer, but is not
   interested in receiving address observations itself.
 * 1: The node is interested in receiving address observations, but it is not
-  willing to provide address observations itself.
+  willing to provide address observations.
 * 2: The node is interested in receiving address observations, and it is willing
   to provide address observations.
 
@@ -139,22 +139,23 @@ receives an OBSERVED_ADDRESS frame.
 
 # Address Discovery
 
-An endpoint that negotiated (see {{negotiate-extension}}) to provide address
-observations to the peer MUST send an OBSERVED_ADDRESS frame with the observed
-network address on every new path. This also applies to the path used for the
-QUIC handshake.
+An endpoint that negotiated (see {{negotiate-extension}}) this extension and
+offered to provide address observations to the peer MUST send an
+OBSERVED_ADDRESS frame on every new path. This also applies to the path used for
+the QUIC handshake.
 
-The OBSERVED_ADDRESS frame SHOULD be sent as early as possible. During the
-handshake, an endpoint SHOULD prioritize frames that lead to handshake progress
-(CRYPTO and ACK frames in particular) over sending of the OBSERVED_ADDRESS
-frame.
+The OBSERVED_ADDRESS frame SHOULD be sent as early as possible. However, during
+the handshake an endpoint SHOULD prioritize frames that lead to handshake
+progress (CRYPTO and ACK frames in particular) over sending of the
+OBSERVED_ADDRESS frame.
 
 For paths used after completion of the handshake, endpoints SHOULD bundle the
 OBSERVED_ADDRESS frame with probing packets. This is possible, since the frame
 is defined to be a probing frame ({{Section 8.2 of RFC9000}}).
 
-The sender SHOULD send an OBSERVED_ADDRESS frame when it detects a change in
-the remote address, e.g. in the case of NAT rebindings.
+Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when it detects a
+change in the remote address on an existing path. This could be indicative of a
+NAT rebindings.
 
 # Security Considerations
 
