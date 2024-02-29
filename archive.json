@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-27T00:01:21.193271+00:00",
+  "timestamp": "2024-02-29T00:01:26.283301+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -95,15 +95,15 @@
       "id": "I_kwDOKhxVW850a3sd",
       "title": "Repeated requests",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/4",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "What if an endpoint receives two requests from different source addresses?",
       "createdAt": "2023-10-19T23:23:04Z",
-      "updatedAt": "2023-10-20T05:18:44Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-27T01:48:11Z",
+      "closedAt": "2024-02-27T01:48:11Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -181,15 +181,15 @@
       "id": "I_kwDOKhxVW850c24K",
       "title": "consider moving away from request-response",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/7",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marten-seemann",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "On the mailing list, Igor proposed to move away from a request-response scheme, and have nodes report the observed address without being requested to do so.\r\n\r\nWe could change the logic such that negotiating this extension means that:\r\n1. Endpoints are expected to inform their peer of the observed address after completion of the handshake (or maybe even in Handshake packets during the handshake?).\r\n2. Include\u00a0a NEW_OBSERVED_ADDRESS frame in probing packets on a new path.\r\n3. Send a NEW_OBSERVED_ADDRESS whenever the remote address changes on a path (e.g. due to a NAT rebinding).\r\n \r\nWe might use the value of the transport parameter to distinguish between \"I'm willing to report your address\" and \"I'm requesting that you send me NEW_OBSERVED_ADDRESS frames\".",
       "createdAt": "2023-10-20T07:40:51Z",
-      "updatedAt": "2023-10-21T06:12:28Z",
-      "closedAt": null,
+      "updatedAt": "2024-02-27T01:48:10Z",
+      "closedAt": "2024-02-27T01:48:10Z",
       "comments": [
         {
           "author": "huitema",
@@ -310,6 +310,34 @@
       "mergedBy": "marten-seemann",
       "mergeCommit": {
         "oid": "fefbb97f06ab436c67889d132cd1ce8b4ebaf20c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOKhxVW85n_FBf",
+      "title": "negotiate send / receive behavior, send OBSERVED_ADDRESS on new paths",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/10",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #7. Closes #4.",
+      "createdAt": "2024-02-27T01:43:24Z",
+      "updatedAt": "2024-02-27T01:48:09Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "fefbb97f06ab436c67889d132cd1ce8b4ebaf20c",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "no-request-response",
+      "headRefOid": "09857ed5f208a9c22a3f358f23fde1e92b4f5523",
+      "closedAt": "2024-02-27T01:48:09Z",
+      "mergedAt": "2024-02-27T01:48:09Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "2e853642334a5422d85c5f73faf9d075b645d2b2"
       },
       "comments": [],
       "reviews": []
