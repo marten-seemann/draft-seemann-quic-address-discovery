@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-02-29T00:01:26.283301+00:00",
+  "timestamp": "2024-03-03T00:01:11.553012+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -338,6 +338,34 @@
       "mergedBy": "marten-seemann",
       "mergeCommit": {
         "oid": "2e853642334a5422d85c5f73faf9d075b645d2b2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOKhxVW85oO9tR",
+      "title": "minor editorial changes",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/11",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-29T00:36:43Z",
+      "updatedAt": "2024-02-29T00:39:00Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2e853642334a5422d85c5f73faf9d075b645d2b2",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "editorial",
+      "headRefOid": "f47f9877361929e1bcb8c5e22abda59c19028c35",
+      "closedAt": "2024-02-29T00:39:00Z",
+      "mergedAt": "2024-02-29T00:39:00Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "aa59fafb851a9f4451fc2dca92b89a7e06e72ade"
       },
       "comments": [],
       "reviews": []
