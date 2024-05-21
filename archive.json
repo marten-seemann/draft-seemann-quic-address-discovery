@@ -1,0 +1,374 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2024-05-21T00:01:30.111924+00:00",
+  "repo": "marten-seemann/draft-seemann-quic-address-discovery",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOKhxVW850URwl",
+      "title": "mention NAT rebindings",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/1",
+      "state": "CLOSED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "It might make sense to re-probe a path every once in a while to detect NAT rebindings.",
+      "createdAt": "2023-10-19T07:21:25Z",
+      "updatedAt": "2023-10-19T07:31:45Z",
+      "closedAt": "2023-10-19T07:31:45Z",
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOKhxVW850a3dg",
+      "title": "0-RTT",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/3",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I am fairly confident that these frames are safe to send in 0-RTT.",
+      "createdAt": "2023-10-19T23:21:48Z",
+      "updatedAt": "2023-10-20T02:01:18Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "The draft states that the frames allowed in the application-data packet number space (which includes both 0-RTT and 1-RTT), and it also requires endpoints to remember the value of the transport parameter for 0-RTT.\r\n\r\nDo you have an editorial suggestion to make it clearer that these frames are allowed in 0-RTT?",
+          "createdAt": "2023-10-20T02:01:17Z",
+          "updatedAt": "2023-10-20T02:01:17Z"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "I_kwDOKhxVW850a3sd",
+      "title": "Repeated requests",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/4",
+      "state": "CLOSED",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "What if an endpoint receives two requests from different source addresses?",
+      "createdAt": "2023-10-19T23:23:04Z",
+      "updatedAt": "2024-02-27T01:48:11Z",
+      "closedAt": "2024-02-27T01:48:11Z",
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "That\u2019s ok, and in fact, that\u2019s expected when the connection is probing different paths. The sequence number allows the requests and responses to be distinguished from each other.",
+          "createdAt": "2023-10-20T02:03:21Z",
+          "updatedAt": "2023-10-20T02:03:21Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "I was specifically talking about the case where the same sequence number appears.\r\n\r\nI think that you want to say that the sequence number (really, a request ID) is just there to help the requester distinguish answers.  The responder just echoes the value back (and responds to every request it receives, even apparent duplicates).",
+          "createdAt": "2023-10-20T05:04:57Z",
+          "updatedAt": "2023-10-20T05:04:57Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "I agree. This makes a lot of sense, and will become a lot more apparent once we rename the field to request ID.",
+          "createdAt": "2023-10-20T05:18:44Z",
+          "updatedAt": "2023-10-20T05:18:44Z"
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "id": "I_kwDOKhxVW850a4HW",
+      "title": "Sequence number or just unique?",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/5",
+      "state": "CLOSED",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Because the sequence number is simply echoed, it might not need to be monotonic.  It should be enough to just have it be unique.  Obviously, a counter is the easiest method to use, but given typical usage, it might be OK to send the same value always.  If the endpoint that responds does so unconditionally (without collapsing duplicates, see #4), then this will probably be enough for most endpoints to get what they need (that is, the set of reflexive addresses they have).",
+      "createdAt": "2023-10-19T23:25:30Z",
+      "updatedAt": "2024-02-11T01:53:51Z",
+      "closedAt": "2024-02-11T01:53:51Z",
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "It\u2019s correct that we only need a unique value, but using a sequence number makes it easier to detect the error condition (when your peer sends you a response for a request you didn\u2019t send).\r\n\r\nMaybe we should just point that out, and rename it to \u201cRequest ID\u201d or something like that?",
+          "createdAt": "2023-10-20T01:59:16Z",
+          "updatedAt": "2023-10-20T01:59:16Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOKhxVW850cTOP",
+      "title": "Document multipath operation?",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/6",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "In a multipath environment, the client is likely to use different addresses on different paths, either because the paths are bound to different addresses or network interfaces at the client, or because different paths are mapped differently by various NAT. It is interesting to discover on which path an address was observed.\r\n\r\nI think this is possible with the current description:\r\n~~~\r\nOBSERVED_ADDRESS Frame {\r\n       Type (i) = 0x9f81a2..0x9f81a3,\r\n       Sequence Number (i),\r\n       [ IPv4 (32) ],\r\n       [ IPv6 (128) ],\r\n       Port (16),\r\n   }\r\n~~~\r\nThe client has to remember on which path a particular `REQUEST_ADDRESS` was sent, and can then match that to the sending path.\r\n\r\nSo, not really an issue, except maybe it could be discussed in an \"operation consideration\" or \"multipath consideration\" section.\r\n",
+      "createdAt": "2023-10-20T05:46:03Z",
+      "updatedAt": "2023-10-20T07:46:01Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "It's not only needed in QUIC Multipath, vanilla QUIC also requires the requester to remember the path. The frames are intentionally defined as probing frames, so you can send them in probing packets during the path validation phase, and you might be probing multiple paths in parallel.",
+          "createdAt": "2023-10-20T07:46:01Z",
+          "updatedAt": "2023-10-20T07:46:01Z"
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOKhxVW850c24K",
+      "title": "consider moving away from request-response",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/7",
+      "state": "CLOSED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "On the mailing list, Igor proposed to move away from a request-response scheme, and have nodes report the observed address without being requested to do so.\r\n\r\nWe could change the logic such that negotiating this extension means that:\r\n1. Endpoints are expected to inform their peer of the observed address after completion of the handshake (or maybe even in Handshake packets during the handshake?).\r\n2. Include\u00a0a NEW_OBSERVED_ADDRESS frame in probing packets on a new path.\r\n3. Send a NEW_OBSERVED_ADDRESS whenever the remote address changes on a path (e.g. due to a NAT rebinding).\r\n \r\nWe might use the value of the transport parameter to distinguish between \"I'm willing to report your address\" and \"I'm requesting that you send me NEW_OBSERVED_ADDRESS frames\".",
+      "createdAt": "2023-10-20T07:40:51Z",
+      "updatedAt": "2024-02-27T01:48:10Z",
+      "closedAt": "2024-02-27T01:48:10Z",
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "That's cool, but then the NEW OBSERVED ADDRESS needs to be tied to a path number. Otherwise, the client will not be able to tell. \r\nMaybe just copy the CID of the packet for which the new address was observed?",
+          "createdAt": "2023-10-21T00:48:58Z",
+          "updatedAt": "2023-10-21T00:48:58Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "@huitema I don\u2019t think that\u2019s necessary. Your QUIC stack will know the path it received the from on, won\u2019t it?",
+          "createdAt": "2023-10-21T01:45:26Z",
+          "updatedAt": "2023-10-21T01:45:26Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "No, because you do not want to constraint the address observed frames to be on the \"same path\". Especially when doing discovery/ice, because there id no guarantee that the \"same path\" is working in both directions.",
+          "createdAt": "2023-10-21T03:55:29Z",
+          "updatedAt": "2023-10-21T03:55:29Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "You're right. I hadn't considered unidirectional paths. Adding the CID would indeed be a solution, but there are downsides to coupling ourselves to the CID state machine: the CID might have been retired in the mean time. Not saying that this isn't possible, but we need to think about corner cases very carefully.",
+          "createdAt": "2023-10-21T03:59:44Z",
+          "updatedAt": "2023-10-21T03:59:44Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "The CID is only retired if the client who sent the traffic decides to retire it. In that case, the client won't be able to match the IP address with a path, which is not good but also not the end of the world.",
+          "createdAt": "2023-10-21T06:12:28Z",
+          "updatedAt": "2023-10-21T06:12:28Z"
+        }
+      ]
+    }
+  ],
+  "pulls": [
+    {
+      "number": 2,
+      "id": "PR_kwDOKhxVW85dO8Vf",
+      "title": "explain how to use REQUEST_ADDRESS to detect NAT rebinding",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/2",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #1.",
+      "createdAt": "2023-10-19T07:25:44Z",
+      "updatedAt": "2023-10-19T07:31:44Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "562e12708287e1bc503227e47f39c67fe4646d13",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "nat-rebinding",
+      "headRefOid": "2dbdaf399552b0036fa6b52bc54e62d29809ee6f",
+      "closedAt": "2023-10-19T07:31:44Z",
+      "mergedAt": "2023-10-19T07:31:44Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "5ceddb699fb96f110a1d4b4b68fc490d10eaa040"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 8,
+      "id": "PR_kwDOKhxVW85mkVuU",
+      "title": "change sequence number to request ID",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/8",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "There's no reason this needs to be sequential.\r\n\r\nFixes #5.",
+      "createdAt": "2024-02-11T01:52:19Z",
+      "updatedAt": "2024-02-11T01:53:51Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "5ceddb699fb96f110a1d4b4b68fc490d10eaa040",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "request-id",
+      "headRefOid": "8d5c116ee69a3ea3a9d43a73d9926387586fa823",
+      "closedAt": "2024-02-11T01:53:50Z",
+      "mergedAt": "2024-02-11T01:53:50Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "e2ce06edb4a4949af1230ffcc9e458a83a6d1336"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 9,
+      "id": "PR_kwDOKhxVW85nJqJl",
+      "title": "remove Marten's affiliation",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/9",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-17T03:07:33Z",
+      "updatedAt": "2024-02-17T03:08:54Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "e2ce06edb4a4949af1230ffcc9e458a83a6d1336",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "remove-protocol-labs",
+      "headRefOid": "3c1898be45870b926442134c3741a5c6fd4051cb",
+      "closedAt": "2024-02-17T03:08:54Z",
+      "mergedAt": "2024-02-17T03:08:54Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "fefbb97f06ab436c67889d132cd1ce8b4ebaf20c"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOKhxVW85n_FBf",
+      "title": "negotiate send / receive behavior, send OBSERVED_ADDRESS on new paths",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/10",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #7. Closes #4.",
+      "createdAt": "2024-02-27T01:43:24Z",
+      "updatedAt": "2024-02-27T01:48:09Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "fefbb97f06ab436c67889d132cd1ce8b4ebaf20c",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "no-request-response",
+      "headRefOid": "09857ed5f208a9c22a3f358f23fde1e92b4f5523",
+      "closedAt": "2024-02-27T01:48:09Z",
+      "mergedAt": "2024-02-27T01:48:09Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "2e853642334a5422d85c5f73faf9d075b645d2b2"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 11,
+      "id": "PR_kwDOKhxVW85oO9tR",
+      "title": "minor editorial changes",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/11",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-02-29T00:36:43Z",
+      "updatedAt": "2024-02-29T00:39:00Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2e853642334a5422d85c5f73faf9d075b645d2b2",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "editorial",
+      "headRefOid": "f47f9877361929e1bcb8c5e22abda59c19028c35",
+      "closedAt": "2024-02-29T00:39:00Z",
+      "mergedAt": "2024-02-29T00:39:00Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "aa59fafb851a9f4451fc2dca92b89a7e06e72ade"
+      },
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
