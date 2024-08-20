@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-18T00:01:27.095303+00:00",
+  "timestamp": "2024-08-20T00:01:24.224560+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -164,7 +164,7 @@
       "labels": [],
       "body": "In a multipath environment, the client is likely to use different addresses on different paths, either because the paths are bound to different addresses or network interfaces at the client, or because different paths are mapped differently by various NAT. It is interesting to discover on which path an address was observed.\r\n\r\nI think this is possible with the current description:\r\n~~~\r\nOBSERVED_ADDRESS Frame {\r\n       Type (i) = 0x9f81a2..0x9f81a3,\r\n       Sequence Number (i),\r\n       [ IPv4 (32) ],\r\n       [ IPv6 (128) ],\r\n       Port (16),\r\n   }\r\n~~~\r\nThe client has to remember on which path a particular `REQUEST_ADDRESS` was sent, and can then match that to the sending path.\r\n\r\nSo, not really an issue, except maybe it could be discussed in an \"operation consideration\" or \"multipath consideration\" section.\r\n",
       "createdAt": "2023-10-20T05:46:03Z",
-      "updatedAt": "2023-10-20T07:46:01Z",
+      "updatedAt": "2024-08-19T22:47:28Z",
       "closedAt": null,
       "comments": [
         {
@@ -173,6 +173,13 @@
           "body": "It's not only needed in QUIC Multipath, vanilla QUIC also requires the requester to remember the path. The frames are intentionally defined as probing frames, so you can send them in probing packets during the path validation phase, and you might be probing multiple paths in parallel.",
           "createdAt": "2023-10-20T07:46:01Z",
           "updatedAt": "2023-10-20T07:46:01Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "NONE",
+          "body": "I think that we need a bit of editing there. The current text says (section 4.1 Observed Address frame):\r\n~~~\r\nRequest ID:\r\n    The request identifier of the request for which this response is intended.\r\n~~~\r\n.. but there is no request defined, thus no ID to copy.\r\n\r\nIf the multipath extension is negotiated, it might be nice to stick there a path-id that identifies the path using the observed address, and maybe stipulate to set the path-id to 0 if the multipath extension is not negotiated.\r\n\r\nIt might also be nice to have some kind of counter, separate from the path ID, to distinguish new values from old packets repeated because of loss recovery.",
+          "createdAt": "2024-08-19T22:47:27Z",
+          "updatedAt": "2024-08-19T22:47:27Z"
         }
       ]
     },
