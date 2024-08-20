@@ -130,6 +130,7 @@ Port:
 This frame MUST only appear in the handshake and in the application data packet
 number space. It is a "probing frame" as defined in {{Section 9.1 of RFC9000}}.
 OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
+Retransmissions MUST happen on the same path as the original frame was sent on.
 
 An endpoint MUST NOT send an OBSERVED_ADDRESS frame to a node that did not
 request the receipt of address observations as described in
