@@ -1226,7 +1226,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-negotiating-extension-use" class="section-name selfRef">Negotiating Extension Use</a>
       </h2>
 <p id="section-3-1">Endpoints advertise their support of the extension by sending the
-address_discovery (0x9f81a174) transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>)
+address_discovery (0x9f81a175) transport parameter (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-7.4" class="relref">Section 7.4</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>)
 with a variable-length integer value. The value determines the behavior with
 respect to address discovery:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1266,7 +1266,7 @@ this extension or change the value on the resumed connection.<a href="#section-3
 <div class="alignLeft art-text artwork" id="section-4.1-1">
 <pre>
 OBSERVED_ADDRESS Frame {
-    Type (i) = 0x9f81a2..0x9f81a3,
+    Type (i) = 0x9f81a4..0x9f81a5,
     [ IPv4 (32) ],
     [ IPv6 (128) ],
     Port (16),
