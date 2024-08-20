@@ -105,6 +105,7 @@ This extension defines the OBSERVED_ADDRESS frame.
 ~~~
 OBSERVED_ADDRESS Frame {
     Type (i) = 0x9f81a4..0x9f81a5,
+    Sequence Number (i),
     [ IPv4 (32) ],
     [ IPv6 (128) ],
     Port (16),
@@ -112,6 +113,15 @@ OBSERVED_ADDRESS Frame {
 ~~~
 
 The OBSERVED_ADDRESS frame contains the following fields:
+
+Sequence Number:
+: A variable-length integer specifying the sequence number assigned for
+  this OBSERVED_ADDRESS frame. The sequence
+  number MUST be monotonically increasing for OBSERVED_ADDRESS frame in the same connection.
+  Frames may be received out of order. A peer SHOULD ignore an incoming
+  OBSERVED_ADDRESS frame if it previously received another OBSERVED_ADDRESS frame
+  for the same path with a Sequence Number equal to or higher than the
+  sequence number of the incoming frame.
 
 IPv4:
 
@@ -127,7 +137,7 @@ Port:
 
 : The port number, in network byte order.
 
-This frame MUST only appear in the handshake and in the application data packet
+This frame MUST only appear in the application data packet
 number space. It is a "probing frame" as defined in {{Section 9.1 of RFC9000}}.
 OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
 Retransmissions MUST happen on the same path as the original frame was sent on.
