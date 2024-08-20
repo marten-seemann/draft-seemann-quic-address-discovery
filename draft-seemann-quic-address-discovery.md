@@ -156,7 +156,9 @@ is defined to be a probing frame ({{Section 8.2 of RFC9000}}).
 
 Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when it detects a
 change in the remote address on an existing path. This could be indicative of a
-NAT rebindings.
+NAT rebinding. However, the sender MAY limit the rate at which OBSERVED_ADDRESS
+frames are produced, to mitigate the spoofed packets attack described in
+{{responder-side-security}}.
 
 # Security Considerations
 
@@ -169,12 +171,24 @@ possible, define some validation logic (e.g. by asking multiple untrusted peers
 and observing if the responses are consistent). This logic is out of scope for
 this document.
 
-## On the Responder Side
+## On the Responder Side {#responder-side-security}
 
 Depending on the routing setup, a node might not be able to observe the peer's
 reflexive transport address, and attempts to do so might reveal details about
 the internal network. In these cases, the node SHOULD NOT offer to provide
 address observations.
+
+On path attackers could capture "normal" packets sent from requester to
+responder, and resend them from a spoofed source address. Such spoofed
+packets could trigger production of spurious OBSERVED_ADDRESS frames.
+The recommendation to only include OBSERVED_ADDRESS frames in packets
+sent on the same path over which the address was observed offers a first
+layer of protection, as these packets will not reach the requester if
+the path is not valid. The attack also has the effect of causing spurious
+detection NAT rebinding. We expect that implementations of QUIC have sufficient
+protection against spurious NAT rebinding to limit the incidental traffic
+caused by such attacks, and will not produce a high volume of
+spurious OBSERVED_ADDRESS frames.
 
 # IANA Considerations
 
