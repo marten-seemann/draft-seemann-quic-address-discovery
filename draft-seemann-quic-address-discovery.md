@@ -30,6 +30,11 @@ author:
  -
     fullname: "Marten Seemann"
     email: "martenseemann@gmail.com"
+ -
+    fullname: "Christian Huitema"
+    org: Private Octopus Inc.
+    email: "huitema@huitema.net"
+
 
 normative:
 
