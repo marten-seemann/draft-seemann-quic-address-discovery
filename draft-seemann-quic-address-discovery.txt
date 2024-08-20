@@ -149,16 +149,12 @@ Table of Contents
 
    OBSERVED_ADDRESS Frame {
        Type (i) = 0x9f81a2..0x9f81a3,
-       Request ID (i),
        [ IPv4 (32) ],
        [ IPv6 (128) ],
        Port (16),
    }
 
    The OBSERVED_ADDRESS frame contains the following fields:
-
-   Request ID:  The request identifier of the request for which this
-      response is intended.
 
    IPv4:  The IPv4 address.  Only present if the least significant bit
       of the frame type is 0.
