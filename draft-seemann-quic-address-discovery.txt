@@ -3,9 +3,10 @@
 
 
 QUIC                                                          M. Seemann
-Internet-Draft                                            20 August 2024
-Intended status: Standards Track                                        
-Expires: 21 February 2025
+Internet-Draft                                                          
+Intended status: Standards Track                              C. Huitema
+Expires: 21 February 2025                           Private Octopus Inc.
+                                                          20 August 2024
 
 
                          QUIC Address Discovery
@@ -84,7 +85,7 @@ Table of Contents
    7.  IANA Considerations
    8.  Normative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -249,7 +250,12 @@ Acknowledgments
 
    TODO acknowledge.
 
-Author's Address
+Authors' Addresses
 
    Marten Seemann
    Email: martenseemann@gmail.com
+
+
+   Christian Huitema
+   Private Octopus Inc.
+   Email: huitema@huitema.net
