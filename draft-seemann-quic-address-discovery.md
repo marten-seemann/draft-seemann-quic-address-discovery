@@ -100,7 +100,6 @@ This extension defines the OBSERVED_ADDRESS frame.
 ~~~
 OBSERVED_ADDRESS Frame {
     Type (i) = 0x9f81a2..0x9f81a3,
-    Request ID (i),
     [ IPv4 (32) ],
     [ IPv6 (128) ],
     Port (16),
@@ -108,10 +107,6 @@ OBSERVED_ADDRESS Frame {
 ~~~
 
 The OBSERVED_ADDRESS frame contains the following fields:
-
-Request ID:
-
-: The request identifier of the request for which this response is intended.
 
 IPv4:
 
