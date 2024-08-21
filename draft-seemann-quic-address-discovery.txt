@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 21 February 2025                           Private Octopus Inc.
-                                                          20 August 2024
+Expires: 22 February 2025                           Private Octopus Inc.
+                                                          21 August 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 February 2025.
+   This Internet-Draft will expire on 22 February 2025.
 
 Copyright Notice
 
@@ -150,12 +150,22 @@ Table of Contents
 
    OBSERVED_ADDRESS Frame {
        Type (i) = 0x9f81a4..0x9f81a5,
+       Sequence Number (i),
        [ IPv4 (32) ],
        [ IPv6 (128) ],
        Port (16),
    }
 
    The OBSERVED_ADDRESS frame contains the following fields:
+
+   Sequence Number:  A variable-length integer specifying the sequence
+      number assigned for this OBSERVED_ADDRESS frame.  The sequence
+      number MUST be monotonically increasing for OBSERVED_ADDRESS frame
+      in the same connection.  Frames may be received out of order.  A
+      peer SHOULD ignore an incoming OBSERVED_ADDRESS frame if it
+      previously received another OBSERVED_ADDRESS frame for the same
+      path with a Sequence Number equal to or higher than the sequence
+      number of the incoming frame.
 
    IPv4:  The IPv4 address.  Only present if the least significant bit
       of the frame type is 0.
