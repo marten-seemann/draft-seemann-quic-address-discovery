@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-20T00:01:24.224560+00:00",
+  "timestamp": "2024-08-22T00:01:19.908971+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -71,15 +71,15 @@
       "id": "I_kwDOKhxVW850a3dg",
       "title": "0-RTT",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/3",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "martinthomson",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "I am fairly confident that these frames are safe to send in 0-RTT.",
       "createdAt": "2023-10-19T23:21:48Z",
-      "updatedAt": "2023-10-20T02:01:18Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-20T06:56:45Z",
+      "closedAt": "2024-08-20T06:56:45Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -87,6 +87,20 @@
           "body": "The draft states that the frames allowed in the application-data packet number space (which includes both 0-RTT and 1-RTT), and it also requires endpoints to remember the value of the transport parameter for 0-RTT.\r\n\r\nDo you have an editorial suggestion to make it clearer that these frames are allowed in 0-RTT?",
           "createdAt": "2023-10-20T02:01:17Z",
           "updatedAt": "2023-10-20T02:01:17Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We do have text in Section 3:\r\n\r\n_When using 0-RTT, both endpoints MUST remember the value of this transport parameter. This allows sending the frame defined by this extension in 0-RTT packets. If 0-RTT data is accepted by the server, the server MUST NOT disable this extension or change the value on the resumed connection_\r\n\r\nI think that does address the issue. @martinthomson, do you agree?",
+          "createdAt": "2024-08-20T06:32:07Z",
+          "updatedAt": "2024-08-20T06:32:07Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "That would do it, yes.",
+          "createdAt": "2024-08-20T06:49:04Z",
+          "updatedAt": "2024-08-20T06:49:04Z"
         }
       ]
     },
@@ -157,15 +171,15 @@
       "id": "I_kwDOKhxVW850cTOP",
       "title": "Document multipath operation?",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
-      "authorAssociation": "NONE",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In a multipath environment, the client is likely to use different addresses on different paths, either because the paths are bound to different addresses or network interfaces at the client, or because different paths are mapped differently by various NAT. It is interesting to discover on which path an address was observed.\r\n\r\nI think this is possible with the current description:\r\n~~~\r\nOBSERVED_ADDRESS Frame {\r\n       Type (i) = 0x9f81a2..0x9f81a3,\r\n       Sequence Number (i),\r\n       [ IPv4 (32) ],\r\n       [ IPv6 (128) ],\r\n       Port (16),\r\n   }\r\n~~~\r\nThe client has to remember on which path a particular `REQUEST_ADDRESS` was sent, and can then match that to the sending path.\r\n\r\nSo, not really an issue, except maybe it could be discussed in an \"operation consideration\" or \"multipath consideration\" section.\r\n",
       "createdAt": "2023-10-20T05:46:03Z",
-      "updatedAt": "2024-08-19T22:47:28Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-20T06:25:37Z",
+      "closedAt": "2024-08-20T06:25:37Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -176,10 +190,17 @@
         },
         {
           "author": "huitema",
-          "authorAssociation": "NONE",
+          "authorAssociation": "COLLABORATOR",
           "body": "I think that we need a bit of editing there. The current text says (section 4.1 Observed Address frame):\r\n~~~\r\nRequest ID:\r\n    The request identifier of the request for which this response is intended.\r\n~~~\r\n.. but there is no request defined, thus no ID to copy.\r\n\r\nIf the multipath extension is negotiated, it might be nice to stick there a path-id that identifies the path using the observed address, and maybe stipulate to set the path-id to 0 if the multipath extension is not negotiated.\r\n\r\nIt might also be nice to have some kind of counter, separate from the path ID, to distinguish new values from old packets repeated because of loss recovery.",
           "createdAt": "2024-08-19T22:47:27Z",
           "updatedAt": "2024-08-19T22:47:27Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think the issue is addressed by PR #14 (Remove request ID) and PR  #15 (Clarify that retransmissions happen on same path).",
+          "createdAt": "2024-08-20T06:25:37Z",
+          "updatedAt": "2024-08-20T06:25:37Z"
         }
       ]
     },
@@ -200,7 +221,7 @@
       "comments": [
         {
           "author": "huitema",
-          "authorAssociation": "NONE",
+          "authorAssociation": "COLLABORATOR",
           "body": "That's cool, but then the NEW OBSERVED ADDRESS needs to be tied to a path number. Otherwise, the client will not be able to tell. \r\nMaybe just copy the CID of the packet for which the new address was observed?",
           "createdAt": "2023-10-21T00:48:58Z",
           "updatedAt": "2023-10-21T00:48:58Z"
@@ -214,7 +235,7 @@
         },
         {
           "author": "huitema",
-          "authorAssociation": "NONE",
+          "authorAssociation": "COLLABORATOR",
           "body": "No, because you do not want to constraint the address observed frames to be on the \"same path\". Especially when doing discovery/ice, because there id no guarantee that the \"same path\" is working in both directions.",
           "createdAt": "2023-10-21T03:55:29Z",
           "updatedAt": "2023-10-21T03:55:29Z"
@@ -228,10 +249,182 @@
         },
         {
           "author": "huitema",
-          "authorAssociation": "NONE",
+          "authorAssociation": "COLLABORATOR",
           "body": "The CID is only retired if the client who sent the traffic decides to retire it. In that case, the client won't be able to match the IP address with a path, which is not good but also not the end of the world.",
           "createdAt": "2023-10-21T06:12:28Z",
           "updatedAt": "2023-10-21T06:12:28Z"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOKhxVW86Tfdq1",
+      "title": "Handling of repeated observed address frames",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/12",
+      "state": "CLOSED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The spec says that \"OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.\" In a multipath environment, this is a bit problematic, because there is generally no guarantee that the frame will be resent on the same path as the first transmission. Indeed, it often makes a lost of sense to resend the content of lost packets on a different path, in particular when the original path is broken.\r\n\r\nThere are two potential fixes: \r\n\r\n1. encode a path ID in the frame, as in \"I have observed this address and port on path number 42\". This would be in line with multipath management frames like PATH_ABANDON or MP_ACK.\r\n2. add a recommendation that \"OBSERVED_ADDRESS frames MUST be sent on the same path over which the address was received.\"\r\n\r\nThe first option is the natural solution when the multipath extension is negotiated.\r\n\r\nThe second option can be implemented, but is a bit painful. If I had to do that, I would just tie the OBSERVED_ADDRESS frames to PATH_CHALLENGE frames, and repeat them when the PATH_CHALLENGE needs to be repeated.",
+      "createdAt": "2024-08-20T00:37:01Z",
+      "updatedAt": "2024-08-20T04:33:45Z",
+      "closedAt": "2024-08-20T04:22:04Z",
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "I'd prefer to not have a dependency on QUIC multipath. Sure, you could set this field to 0 when using pure RFC 9000 QUIC, but it would be nice if we didn't have to do that.\r\n\r\nWhen we a request-response protocol, we had the concept of a Request ID (remnants of which you can still see in the OBSERVED_ADDR frame, see #13), which tied a response to a request. This meant that it didn't matter which path the response was sent on.\r\n\r\n\r\n\r\n> 2\\. add a recommendation that \"OBSERVED_ADDRESS frames MUST be sent on the same path over which the address was received.\"\r\n\r\nI think this is what we should do. I'm not sure how painful it is to implement, but I imagine that any multipath implementation will need some logic to tie certain frames to a specific path anyway.",
+          "createdAt": "2024-08-20T02:56:30Z",
+          "updatedAt": "2024-08-20T02:56:30Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Having the server (or the responder) send an observed frame each time it observes a new address is nice -- address changes due to NAT or whatever and poof, you get a frame. But there are potential issues, and a request response may be preferable after all.\r\n\r\nFirst, the address \"changes\" may be trigger by third parties: capture a packet, make sure it does not reach its destination, then send it from an arbitrary address. The reaction to NAT traversal is a little slower, but could be triggered by the CID rotation done by the peer. The request mode seems a bit less prone to outside interference.",
+          "createdAt": "2024-08-20T04:18:43Z",
+          "updatedAt": "2024-08-20T04:18:43Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "> First, the address \"changes\" may be trigger by third parties: capture a packet, make sure it does not reach its destination, then send it from an arbitrary address.\r\n\r\nI'm wondering if this could be used by an on-path attacker to trigger a Honeybadger-style DoS attack: Capture all packets, and send them from 2 different interfaces in an alternating way, thereby triggering the sending of lots of OBSERVED_ADDRESS frames.\r\n\r\nOn the other hand, this attack is already possible, as any change in path requires the peer to go through path validation.",
+          "createdAt": "2024-08-20T04:25:03Z",
+          "updatedAt": "2024-08-20T04:25:03Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I actually simulate an attack like that in the picoquic test suite, for testing the robustness of NAT traversal. There are no good defense, but the code should at a minimum dampen the attack. Maybe document that in security considerations?",
+          "createdAt": "2024-08-20T04:33:44Z",
+          "updatedAt": "2024-08-20T04:33:44Z"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOKhxVW86Tf5Fk",
+      "title": "remove REQUEST_ID from OBSERVED_ADDR frame",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/13",
+      "state": "CLOSED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This is not needed anymore, since we moved away from request - response.",
+      "createdAt": "2024-08-20T02:54:50Z",
+      "updatedAt": "2024-08-20T04:25:23Z",
+      "closedAt": "2024-08-20T04:25:23Z",
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOKhxVW86TgOxy",
+      "title": "Differentiate old and new values of observed address",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/17",
+      "state": "CLOSED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Assume the following scenario:\r\n\r\n* Server observes an NAT rebinding, sends \"observed address\" frame number 1,\r\n* Packet carrying the observed address frame is lost\r\n* Server observes an NAT rebinding, sends \"observed address\" frame number 2,\r\n* Client receives \"observed address\" frame number 2,\r\n* Server notices the loss and repeats \"observed address\" frame number 1,\r\n* Client receives \"observed address\" frame number 1.\r\n\r\nThus, client is confused...\r\n\r\nWe have generally treated such issues by adding a monotonically increasing sequence number to the frame, so we can retain only the last one, or the last one for a given path. See for example the PATH_STANDBY and PATH_AVAILABLE multipath frames.",
+      "createdAt": "2024-08-20T04:37:14Z",
+      "updatedAt": "2024-08-21T05:19:42Z",
+      "closedAt": "2024-08-21T05:19:42Z",
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "The server should probably not retransmit stale values, but the problem still exists since two packets contain two OBSERVED_ADDRESS frames could be reordered in the network. This is especially relevant in this case, as the different paths could exhibit different RTTs.\r\n\r\nAdding a sequence number sounds like a reasonable solution.",
+          "createdAt": "2024-08-20T04:46:42Z",
+          "updatedAt": "2024-08-20T04:46:42Z"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "id": "I_kwDOKhxVW86TgO8i",
+      "title": "add packet rerouting attack defense to security considerations",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/18",
+      "state": "OPEN",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "              I actually simulate an attack like that in the picoquic test suite, for testing the robustness of NAT traversal. There are no good defense, but the code should at a minimum dampen the attack. Maybe document that in security considerations?\r\n\r\n_Originally posted by @huitema in https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/12#issuecomment-2297946124_\r\n            ",
+      "createdAt": "2024-08-20T04:38:01Z",
+      "updatedAt": "2024-08-20T04:38:01Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 20,
+      "id": "I_kwDOKhxVW86TgVtb",
+      "title": "request shorter frame code points before RFC publication",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/20",
+      "state": "OPEN",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "A 2-byte code point would be nice.",
+      "createdAt": "2024-08-20T05:07:50Z",
+      "updatedAt": "2024-08-20T05:07:50Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 21,
+      "id": "I_kwDOKhxVW86TgvC1",
+      "title": "Do we really need to allow this frame in handshake packets?",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/21",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Handshake packets are received by the client *before* the negotiation of transport parameters completes, thus the client does not know whether the frames are authorized or not. Disallowing these frames in handshake packets would simplify the implementation, with very little impact on performance.",
+      "createdAt": "2024-08-20T06:35:46Z",
+      "updatedAt": "2024-08-20T09:29:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "Makes sense. You can just send them in 0.5-RTT data instead, potentially in the same (coalesced) packet.",
+          "createdAt": "2024-08-20T09:29:31Z",
+          "updatedAt": "2024-08-20T09:29:31Z"
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOKhxVW86To9j5",
+      "title": "Transport Parameter should reserve value 0 for Unsupported",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/24",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The current definition of the `address_discovery` parameter specifies 3 possible values:\r\n\r\n0. The node is willing to provide address observations to its peer, but is not interested in receiving address observations itself.\r\n1. The node is interested in receiving address observations, but it is not willing to provide address observations.\r\n2. The node is interested in receiving address observations, and it is willing to provide address observations.\r\n\r\nThere is a hidden value, \"parameter absent\", that means \"address discovery is not supported.\" That requires managing an additional boolean in the implementation, to specify to not send this parameter.\r\n\r\nI think that it would be simpler to explicitly have 4 values:\r\n\r\n0. Address discovery is not supported. This is the default value if the parameter is absent.\r\n1. The node is willing to provide address observations to its peer, but is not interested in receiving address observations itself.\r\n2. The node is interested in receiving address observations, but it is not willing to provide address observations.\r\n3. The node is interested in receiving address observations, and it is willing to provide address observations.\r\n\r\n If the value is 0, the implementation should not send the parameter.\r\n\r\nThis does not create any additional overhead, since we always need one byte to encode the value.",
+      "createdAt": "2024-08-21T03:53:57Z",
+      "updatedAt": "2024-08-21T04:13:48Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "I'm not sure I understand the problem. How you store this in your implementation is independent from how we encode things on the wire. It's totally reasonable to have an enum with the 4 states you describe to represent the state of this extension.",
+          "createdAt": "2024-08-21T03:59:11Z",
+          "updatedAt": "2024-08-21T03:59:11Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "That's indeed what I do, 4 values internally, 3 values on the wire. But it is a bit of gratuitous complexity. 4 values on the wire would be just as easy to process as 3 values, and would simplify the code. Not a huge deal, of course, but I did get confused when writing my unit test, and other developers could be.",
+          "createdAt": "2024-08-21T04:13:47Z",
+          "updatedAt": "2024-08-21T04:13:47Z"
         }
       ]
     }
@@ -374,6 +567,288 @@
       "mergeCommit": {
         "oid": "aa59fafb851a9f4451fc2dca92b89a7e06e72ade"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 14,
+      "id": "PR_kwDOKhxVW854zXYo",
+      "title": "remove Request ID from OBSERVED_ADDRESS frame",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/14",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-08-20T02:59:40Z",
+      "updatedAt": "2024-08-20T04:25:22Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "aa59fafb851a9f4451fc2dca92b89a7e06e72ade",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "remove-request-id",
+      "headRefOid": "68aec267e60d3eacb4a9770d6e41008feb45101f",
+      "closedAt": "2024-08-20T04:25:22Z",
+      "mergedAt": "2024-08-20T04:25:22Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "113f4b62f97fa5fffca2249da15111c0ddce0bee"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86F7ZL9",
+          "commit": {
+            "abbreviatedOid": "68aec26"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "That's certainly a clarification, and thus an improvement. We have a related issue of differentiating between delayed packets (loss recovery, etc.) and new values, but we can discuss that in a separate issue/PR.",
+          "createdAt": "2024-08-20T04:23:47Z",
+          "updatedAt": "2024-08-20T04:23:47Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "id": "PR_kwDOKhxVW854zYKV",
+      "title": "clarify that retransmissions happen on the same path",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/15",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #12.\r\n\r\n@huitema, wdyt?",
+      "createdAt": "2024-08-20T03:03:24Z",
+      "updatedAt": "2024-08-20T04:22:03Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "aa59fafb851a9f4451fc2dca92b89a7e06e72ade",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "retransmission-on-same-path",
+      "headRefOid": "18dee3251d976c032f8bcaf147a35c6413b5dbbc",
+      "closedAt": "2024-08-20T04:22:03Z",
+      "mergedAt": "2024-08-20T04:22:03Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "3146bc44edc41d33dc2647ba0809d2718c039047"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86F7YbN",
+          "commit": {
+            "abbreviatedOid": "18dee32"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "Yes, that's what we discussed. If we don't go back to a request/response model, that's what we need.",
+          "createdAt": "2024-08-20T04:19:53Z",
+          "updatedAt": "2024-08-20T04:19:53Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKhxVW86F7Ydy",
+          "commit": {
+            "abbreviatedOid": "18dee32"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-20T04:20:05Z",
+          "updatedAt": "2024-08-20T04:20:05Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOKhxVW854zohW",
+      "title": "bump code points for transport parameter and frame types",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/16",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "draft-02 was published prematurely without changing the code points, despite a breaking change to the wire format of the OBSERVED_ADDRESS frame.",
+      "createdAt": "2024-08-20T04:32:08Z",
+      "updatedAt": "2024-08-20T04:36:10Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "113f4b62f97fa5fffca2249da15111c0ddce0bee",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "bump-code-points",
+      "headRefOid": "8870277fbb62bb5cc00a20cf5b3907f5e3f28b25",
+      "closedAt": "2024-08-20T04:36:10Z",
+      "mergedAt": "2024-08-20T04:36:10Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "0f3d50e96f3f0695709ab4b6ca32a39e5f273de6"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOKhxVW854ztdA",
+      "title": "Add Christian in authors' list.",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/19",
+      "state": "MERGED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-08-20T04:57:13Z",
+      "updatedAt": "2024-08-20T05:09:09Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "0f3d50e96f3f0695709ab4b6ca32a39e5f273de6",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "add_christian",
+      "headRefOid": "18dbf3e907452e62c59e7cfb1fe4d3a8dd8f2dbb",
+      "closedAt": "2024-08-20T05:08:24Z",
+      "mergedAt": "2024-08-20T05:08:24Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "f4b08be5077acd7e38bb5736c212b2dd45afe945"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86F7hIZ",
+          "commit": {
+            "abbreviatedOid": "9380f39"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-20T05:01:25Z",
+          "updatedAt": "2024-08-20T05:01:25Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\n    org: \"Private Octopus Inc.\"\r\n```",
+              "createdAt": "2024-08-20T05:01:25Z",
+              "updatedAt": "2024-08-20T05:01:25Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOKhxVW8543hix",
+      "title": "Add sequence number to observed frame definition.",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/22",
+      "state": "MERGED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Add a sequence number to the observed address frame, using the same format as previous drafts, and explain how this monotonically increasing sequence number is used to avoid acting on duplicated or delayed packets. Also strikes out the reference to handshake packets.\r\n\r\nClose #17",
+      "createdAt": "2024-08-20T14:36:50Z",
+      "updatedAt": "2024-08-21T06:09:29Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "f4b08be5077acd7e38bb5736c212b2dd45afe945",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "sequence_number",
+      "headRefOid": "1725f38ea9f53c40e46529b1b07bc3904f662e28",
+      "closedAt": "2024-08-21T05:19:41Z",
+      "mergedAt": "2024-08-21T05:19:41Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "0f36a0e20c3866534dfcc0321f40f81e165512b8"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86GF76A",
+          "commit": {
+            "abbreviatedOid": "9bef167"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-21T04:48:48Z",
+          "updatedAt": "2024-08-21T04:48:52Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "Let's do this in a separate PR.\r\n```suggestion\r\nThis frame MUST only appear in the handshake and in the application data packet\r\n```",
+              "createdAt": "2024-08-21T04:48:49Z",
+              "updatedAt": "2024-08-21T04:48:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GGEEI",
+          "commit": {
+            "abbreviatedOid": "9bef167"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-21T05:14:44Z",
+          "updatedAt": "2024-08-21T05:14:44Z",
+          "comments": [
+            {
+              "originalPosition": 29,
+              "body": "OK.",
+              "createdAt": "2024-08-21T05:14:44Z",
+              "updatedAt": "2024-08-21T05:14:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GGFQ3",
+          "commit": {
+            "abbreviatedOid": "1725f38"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-21T05:19:15Z",
+          "updatedAt": "2024-08-21T05:19:15Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOKhxVW8545GTU",
+      "title": "Describe the spoofed source address attack.",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/23",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Close #18",
+      "createdAt": "2024-08-20T18:36:14Z",
+      "updatedAt": "2024-08-20T18:36:15Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "f4b08be5077acd7e38bb5736c212b2dd45afe945",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "address_attack",
+      "headRefOid": "6add9c05f96bf4cad3423e230ae4d58bea9886e4",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
