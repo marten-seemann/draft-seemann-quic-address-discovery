@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 22 February 2025                           Private Octopus Inc.
-                                                          21 August 2024
+Expires: 23 February 2025                           Private Octopus Inc.
+                                                          22 August 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 February 2025.
+   This Internet-Draft will expire on 23 February 2025.
 
 Copyright Notice
 
@@ -175,11 +175,11 @@ Table of Contents
 
    Port:  The port number, in network byte order.
 
-   This frame MUST only appear in the handshake and in the application
-   data packet number space.  It is a "probing frame" as defined in
-   Section 9.1 of [RFC9000].  OBSERVED_ADDRESS frames are ack-eliciting,
-   and SHOULD be retransmitted if lost.  Retransmissions MUST happen on
-   the same path as the original frame was sent on.
+   This frame MUST only appear in the application data packet number
+   space.  It is a "probing frame" as defined in Section 9.1 of
+   [RFC9000].  OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be
+   retransmitted if lost.  Retransmissions MUST happen on the same path
+   as the original frame was sent on.
 
    An endpoint MUST NOT send an OBSERVED_ADDRESS frame to a node that
    did not request the receipt of address observations as described in
