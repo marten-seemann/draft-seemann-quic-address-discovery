@@ -76,7 +76,7 @@ advantages:
 # Negotiating Extension Use {#negotiate-extension}
 
 Endpoints advertise their support of the extension by sending the
-address_discovery (0x9f81a175) transport parameter ({{Section 7.4 of RFC9000}})
+address_discovery (0x9f81a176) transport parameter ({{Section 7.4 of RFC9000}})
 with a variable-length integer value. The value determines the behavior with
 respect to address discovery:
 
@@ -104,7 +104,7 @@ This extension defines the OBSERVED_ADDRESS frame.
 
 ~~~
 OBSERVED_ADDRESS Frame {
-    Type (i) = 0x9f81a4..0x9f81a5,
+    Type (i) = 0x9f81a6..0x9f81a7,
     Sequence Number (i),
     [ IPv4 (32) ],
     [ IPv6 (128) ],
