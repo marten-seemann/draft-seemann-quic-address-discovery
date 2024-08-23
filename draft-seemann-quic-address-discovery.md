@@ -191,7 +191,7 @@ detection NAT rebinding, and is a variant of the replacement of addresses
 of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
 QUIC implementations are expected to have sufficient
 protection against spurious NAT rebinding to limit the incidental traffic
-caused by such attacks, and will not produce a high volume of
+caused by such attacks. The same protection logic SHOULD be used to prevent sending of a large number of
 spurious OBSERVED_ADDRESS frames.
 
 # IANA Considerations
