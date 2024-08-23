@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 21 February 2025                           Private Octopus Inc.
-                                                          20 August 2024
+Expires: 24 February 2025                           Private Octopus Inc.
+                                                          23 August 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 February 2025.
+   This Internet-Draft will expire on 24 February 2025.
 
 Copyright Notice
 
@@ -218,8 +218,8 @@ Table of Contents
    reveal details about the internal network.  In these cases, the node
    SHOULD NOT offer to provide address observations.
 
-   On path attackers could capture "normal" packets sent from requester
-   to responder, and resend them from a spoofed source address.  Such
+   On-path attackers could capture packets sent from the requester to
+   the responder, and resend them from a spoofed source address.  Such
    spoofed packets could trigger production of spurious OBSERVED_ADDRESS
    frames.  The recommendation to only include OBSERVED_ADDRESS frames
    in packets sent on the same path over which the address was observed
