@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 23 February 2025                           Private Octopus Inc.
-                                                          22 August 2024
+Expires: 24 February 2025                           Private Octopus Inc.
+                                                          23 August 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 February 2025.
+   This Internet-Draft will expire on 24 February 2025.
 
 Copyright Notice
 
@@ -118,7 +118,7 @@ Table of Contents
 3.  Negotiating Extension Use
 
    Endpoints advertise their support of the extension by sending the
-   address_discovery (0x9f81a175) transport parameter (Section 7.4 of
+   address_discovery (0x9f81a176) transport parameter (Section 7.4 of
    [RFC9000]) with a variable-length integer value.  The value
    determines the behavior with respect to address discovery:
 
@@ -149,7 +149,7 @@ Table of Contents
 4.1.  OBSERVED_ADDRESS
 
    OBSERVED_ADDRESS Frame {
-       Type (i) = 0x9f81a4..0x9f81a5,
+       Type (i) = 0x9f81a6..0x9f81a7,
        Sequence Number (i),
        [ IPv4 (32) ],
        [ IPv6 (128) ],
