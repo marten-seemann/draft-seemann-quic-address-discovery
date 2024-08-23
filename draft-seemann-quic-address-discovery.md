@@ -182,10 +182,14 @@ On-path attackers could capture packets sent from the requester to the
 responder, and resend them from a spoofed source address. If done repeatedly,
 these spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.
 The recommendation to only include OBSERVED_ADDRESS frames in packets
-sent on the same path over which the address was observed offers a first
-layer of protection, as these packets will not reach the requester if
-the path is not valid. The attack also has the effect of causing spurious
-detection NAT rebinding. We expect that implementations of QUIC have sufficient
+sent on the same path over which the address was observed ensures
+that the peer will not receive the OBSERVE_ADDRESS frames if the
+addresses are not valid, but does not reduce the number of
+packets sent over the network.
+The attack also has the effect of causing spurious
+detection NAT rebinding, and is a variant of the replacement of addresses
+of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
+We expect that implementations of QUIC have sufficient
 protection against spurious NAT rebinding to limit the incidental traffic
 caused by such attacks, and will not produce a high volume of
 spurious OBSERVED_ADDRESS frames.
