@@ -179,8 +179,8 @@ the internal network. In these cases, the node SHOULD NOT offer to provide
 address observations.
 
 On-path attackers could capture packets sent from the requester to the
-responder, and resend them from a spoofed source address. Such spoofed
-packets could trigger production of spurious OBSERVED_ADDRESS frames.
+responder, and resend them from a spoofed source address. If done repeatedly,
+these spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.
 The recommendation to only include OBSERVED_ADDRESS frames in packets
 sent on the same path over which the address was observed offers a first
 layer of protection, as these packets will not reach the requester if
