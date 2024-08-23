@@ -184,7 +184,7 @@ these spoofed packets could trigger the sending of a large number of OBSERVED_AD
 The recommendation to only include OBSERVED_ADDRESS frames in packets
 sent on the same path over which the address was observed ensures
 that the peer will not receive the OBSERVED_ADDRESS frames if the
-addresses are not valid, but does not reduce the number of
+addresses are not valid, but this does not reduce the number of
 packets sent over the network.
 The attack also has the effect of causing spurious
 detection NAT rebinding, and is a variant of the replacement of addresses
