@@ -189,7 +189,7 @@ packets sent over the network.
 The attack also has the effect of causing spurious
 detection NAT rebinding, and is a variant of the replacement of addresses
 of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
-We expect that implementations of QUIC have sufficient
+QUIC implementations are expected to have sufficient
 protection against spurious NAT rebinding to limit the incidental traffic
 caused by such attacks, and will not produce a high volume of
 spurious OBSERVED_ADDRESS frames.
