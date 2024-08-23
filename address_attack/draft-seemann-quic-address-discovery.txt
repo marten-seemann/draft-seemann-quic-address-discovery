@@ -224,14 +224,15 @@ Table of Contents
    large number of OBSERVED_ADDRESS frames.  The recommendation to only
    include OBSERVED_ADDRESS frames in packets sent on the same path over
    which the address was observed ensures that the peer will not receive
-   the OBSERVED_ADDRESS frames if the addresses are not valid, but does
-   not reduce the number of packets sent over the network.  The attack
-   also has the effect of causing spurious detection NAT rebinding, and
-   is a variant of the replacement of addresses of packets mentioned in
-   Section 21.1.1.3 of [RFC9000].  We expect that implementations of
-   QUIC have sufficient protection against spurious NAT rebinding to
-   limit the incidental traffic caused by such attacks, and will not
-   produce a high volume of spurious OBSERVED_ADDRESS frames.
+   the OBSERVED_ADDRESS frames if the addresses are not valid, but this
+   does not reduce the number of packets sent over the network.  The
+   attack also has the effect of causing spurious detection NAT
+   rebinding, and is a variant of the replacement of addresses of
+   packets mentioned in Section 21.1.1.3 of [RFC9000].  We expect that
+   implementations of QUIC have sufficient protection against spurious
+   NAT rebinding to limit the incidental traffic caused by such attacks,
+   and will not produce a high volume of spurious OBSERVED_ADDRESS
+   frames.
 
 7.  IANA Considerations
 
