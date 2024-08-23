@@ -178,7 +178,7 @@ reflexive transport address, and attempts to do so might reveal details about
 the internal network. In these cases, the node SHOULD NOT offer to provide
 address observations.
 
-On path attackers could capture "normal" packets sent from requester to
+On-path attackers could capture packets sent from the requester to the
 responder, and resend them from a spoofed source address. Such spoofed
 packets could trigger production of spurious OBSERVED_ADDRESS frames.
 The recommendation to only include OBSERVED_ADDRESS frames in packets
