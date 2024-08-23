@@ -1362,8 +1362,8 @@ reflexive transport address, and attempts to do so might reveal details about
 the internal network. In these cases, the node <span class="bcp14">SHOULD NOT</span> offer to provide
 address observations.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">On-path attackers could capture packets sent from the requester to the
-responder, and resend them from a spoofed source address. Such spoofed
-packets could trigger production of spurious OBSERVED_ADDRESS frames.
+responder, and resend them from a spoofed source address. If done repeatedly,
+these spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.
 The recommendation to only include OBSERVED_ADDRESS frames in packets
 sent on the same path over which the address was observed offers a first
 layer of protection, as these packets will not reach the requester if
