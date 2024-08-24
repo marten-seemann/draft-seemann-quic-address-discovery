@@ -166,7 +166,9 @@ is defined to be a probing frame ({{Section 8.2 of RFC9000}}).
 
 Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when it detects a
 change in the remote address on an existing path. This could be indicative of a
-NAT rebindings.
+NAT rebinding. However, the sender MAY limit the rate at which OBSERVED_ADDRESS
+frames are produced, to mitigate the spoofed packets attack described in
+{{responder-side-security}}.
 
 # Security Considerations
 
@@ -179,12 +181,28 @@ possible, define some validation logic (e.g. by asking multiple untrusted peers
 and observing if the responses are consistent). This logic is out of scope for
 this document.
 
-## On the Responder Side
+## On the Responder Side {#responder-side-security}
 
 Depending on the routing setup, a node might not be able to observe the peer's
 reflexive transport address, and attempts to do so might reveal details about
 the internal network. In these cases, the node SHOULD NOT offer to provide
 address observations.
+
+On-path attackers could capture packets sent from the requester to the
+responder, and resend them from a spoofed source address. If done repeatedly,
+these spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.
+The recommendation to only include OBSERVED_ADDRESS frames in packets
+sent on the same path over which the address was observed ensures
+that the peer will not receive the OBSERVED_ADDRESS frames if the
+addresses are not valid, but this does not reduce the number of
+packets sent over the network.
+The attack also has the effect of causing spurious
+detection NAT rebinding, and is a variant of the replacement of addresses
+of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
+QUIC implementations are expected to have sufficient
+protection against spurious NAT rebinding to limit the incidental traffic
+caused by such attacks. The same protection logic SHOULD be used to prevent sending of a large number of
+spurious OBSERVED_ADDRESS frames.
 
 # IANA Considerations
 
