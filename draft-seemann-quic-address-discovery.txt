@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 24 February 2025                           Private Octopus Inc.
-                                                          23 August 2024
+Expires: 25 February 2025                           Private Octopus Inc.
+                                                          24 August 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 February 2025.
+   This Internet-Draft will expire on 25 February 2025.
 
 Copyright Notice
 
@@ -206,7 +206,9 @@ Table of Contents
 
    Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when
    it detects a change in the remote address on an existing path.  This
-   could be indicative of a NAT rebindings.
+   could be indicative of a NAT rebinding.  However, the sender MAY
+   limit the rate at which OBSERVED_ADDRESS frames are produced, to
+   mitigate the spoofed packets attack described in Section 6.2.
 
 6.  Security Considerations
 
@@ -225,6 +227,22 @@ Table of Contents
    the peer's reflexive transport address, and attempts to do so might
    reveal details about the internal network.  In these cases, the node
    SHOULD NOT offer to provide address observations.
+
+   On-path attackers could capture packets sent from the requester to
+   the responder, and resend them from a spoofed source address.  If
+   done repeatedly, these spoofed packets could trigger the sending of a
+   large number of OBSERVED_ADDRESS frames.  The recommendation to only
+   include OBSERVED_ADDRESS frames in packets sent on the same path over
+   which the address was observed ensures that the peer will not receive
+   the OBSERVED_ADDRESS frames if the addresses are not valid, but this
+   does not reduce the number of packets sent over the network.  The
+   attack also has the effect of causing spurious detection NAT
+   rebinding, and is a variant of the replacement of addresses of
+   packets mentioned in Section 21.1.1.3 of [RFC9000].  QUIC
+   implementations are expected to have sufficient protection against
+   spurious NAT rebinding to limit the incidental traffic caused by such
+   attacks.  The same protection logic SHOULD be used to prevent sending
+   of a large number of spurious OBSERVED_ADDRESS frames.
 
 7.  IANA Considerations
 
