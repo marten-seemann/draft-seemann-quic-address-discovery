@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-22T00:01:19.908971+00:00",
+  "timestamp": "2024-08-25T00:01:15.446813+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -346,15 +346,15 @@
       "id": "I_kwDOKhxVW86TgO8i",
       "title": "add packet rerouting attack defense to security considerations",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/18",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marten-seemann",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "              I actually simulate an attack like that in the picoquic test suite, for testing the robustness of NAT traversal. There are no good defense, but the code should at a minimum dampen the attack. Maybe document that in security considerations?\r\n\r\n_Originally posted by @huitema in https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/12#issuecomment-2297946124_\r\n            ",
       "createdAt": "2024-08-20T04:38:01Z",
-      "updatedAt": "2024-08-20T04:38:01Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-24T02:46:03Z",
+      "closedAt": "2024-08-24T02:46:03Z",
       "comments": []
     },
     {
@@ -369,24 +369,39 @@
       "labels": [],
       "body": "A 2-byte code point would be nice.",
       "createdAt": "2024-08-20T05:07:50Z",
-      "updatedAt": "2024-08-20T05:07:50Z",
+      "updatedAt": "2024-08-24T05:20:38Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I do not really understand the process either. I was expecting some kind of form, but apparently we just need to send an email to the IANA, explaining that we need a code for a transport type and also two consecutive codes for the frame types. If we have to propose values, I would go with 0xAD1 for the \"Address Discovery\" TP, and 0x0B5A and 0x0B5B for the observed addresses V4 and V6 (OBServed A and OBServed B), but that's just because I like mnemonics.\r\n\r\nBut I wonder whether we should wait for WG adoption... which my take a bit more time.",
+          "createdAt": "2024-08-24T04:51:21Z",
+          "updatedAt": "2024-08-24T04:51:21Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "I agree. We can always change code points and bump the draft version.",
+          "createdAt": "2024-08-24T05:20:37Z",
+          "updatedAt": "2024-08-24T05:20:37Z"
+        }
+      ]
     },
     {
       "number": 21,
       "id": "I_kwDOKhxVW86TgvC1",
       "title": "Do we really need to allow this frame in handshake packets?",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/21",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Handshake packets are received by the client *before* the negotiation of transport parameters completes, thus the client does not know whether the frames are authorized or not. Disallowing these frames in handshake packets would simplify the implementation, with very little impact on performance.",
       "createdAt": "2024-08-20T06:35:46Z",
-      "updatedAt": "2024-08-20T09:29:32Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-22T06:32:51Z",
+      "closedAt": "2024-08-22T06:32:51Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -402,15 +417,17 @@
       "id": "I_kwDOKhxVW86To9j5",
       "title": "Transport Parameter should reserve value 0 for Unsupported",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/24",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "huitema",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
-      "labels": [],
+      "labels": [
+        "invalid"
+      ],
       "body": "The current definition of the `address_discovery` parameter specifies 3 possible values:\r\n\r\n0. The node is willing to provide address observations to its peer, but is not interested in receiving address observations itself.\r\n1. The node is interested in receiving address observations, but it is not willing to provide address observations.\r\n2. The node is interested in receiving address observations, and it is willing to provide address observations.\r\n\r\nThere is a hidden value, \"parameter absent\", that means \"address discovery is not supported.\" That requires managing an additional boolean in the implementation, to specify to not send this parameter.\r\n\r\nI think that it would be simpler to explicitly have 4 values:\r\n\r\n0. Address discovery is not supported. This is the default value if the parameter is absent.\r\n1. The node is willing to provide address observations to its peer, but is not interested in receiving address observations itself.\r\n2. The node is interested in receiving address observations, but it is not willing to provide address observations.\r\n3. The node is interested in receiving address observations, and it is willing to provide address observations.\r\n\r\n If the value is 0, the implementation should not send the parameter.\r\n\r\nThis does not create any additional overhead, since we always need one byte to encode the value.",
       "createdAt": "2024-08-21T03:53:57Z",
-      "updatedAt": "2024-08-21T04:13:48Z",
-      "closedAt": null,
+      "updatedAt": "2024-08-22T06:54:53Z",
+      "closedAt": "2024-08-22T06:54:53Z",
       "comments": [
         {
           "author": "marten-seemann",
@@ -425,6 +442,34 @@
           "body": "That's indeed what I do, 4 values internally, 3 values on the wire. But it is a bit of gratuitous complexity. 4 values on the wire would be just as easy to process as 3 values, and would simplify the code. Not a huge deal, of course, but I did get confused when writing my unit test, and other developers could be.",
           "createdAt": "2024-08-21T04:13:47Z",
           "updatedAt": "2024-08-21T04:13:47Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "Do we have any precedent for explicitly encoding \"I don't support this extension\" in other QUIC extensions? I see little value in explicitly encoding this on the wire.",
+          "createdAt": "2024-08-22T03:31:09Z",
+          "updatedAt": "2024-08-22T03:31:09Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "RFC 9218, QUIC Datagrams, advertises the maximum length of a datagram frame. Value 0 means \"not supported.\"",
+          "createdAt": "2024-08-22T06:07:44Z",
+          "updatedAt": "2024-08-22T06:07:44Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "That's 9221, and I interpret the RFC differently. It just means that you don't support _receiving_ DATAGRAM frames.",
+          "createdAt": "2024-08-22T06:32:33Z",
+          "updatedAt": "2024-08-22T06:32:33Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sorry for the wrong number. But, fine, let's keep the text as is.",
+          "createdAt": "2024-08-22T06:52:30Z",
+          "updatedAt": "2024-08-22T06:52:30Z"
         }
       ]
     }
@@ -831,26 +876,262 @@
       "id": "PR_kwDOKhxVW8545GTU",
       "title": "Describe the spoofed source address attack.",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/23",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "huitema",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Close #18",
       "createdAt": "2024-08-20T18:36:14Z",
-      "updatedAt": "2024-08-20T18:36:15Z",
+      "updatedAt": "2024-08-24T02:46:02Z",
       "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
       "baseRefName": "main",
       "baseRefOid": "f4b08be5077acd7e38bb5736c212b2dd45afe945",
       "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
       "headRefName": "address_attack",
-      "headRefOid": "6add9c05f96bf4cad3423e230ae4d58bea9886e4",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "c105bfccbbd1466640b031cfa59d20512794c848",
+      "closedAt": "2024-08-24T02:46:02Z",
+      "mergedAt": "2024-08-24T02:46:02Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "96bc34902d3ae695e38d623b72796497eea039a8"
+      },
       "comments": [],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86GfV6c",
+          "commit": {
+            "abbreviatedOid": "6add9c0"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T05:00:16Z",
+          "updatedAt": "2024-08-23T05:02:44Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\nOn-path attackers could capture packets sent from the requester to the\r\n```",
+              "createdAt": "2024-08-23T05:00:16Z",
+              "updatedAt": "2024-08-23T05:02:44Z"
+            },
+            {
+              "originalPosition": 25,
+              "body": "```suggestion\r\nresponder, and resend them from a spoofed source address. If done repeatedly,\r\nthese spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.\r\n```",
+              "createdAt": "2024-08-23T05:01:07Z",
+              "updatedAt": "2024-08-23T05:02:44Z"
+            },
+            {
+              "originalPosition": 28,
+              "body": "How does this protect against the sender?",
+              "createdAt": "2024-08-23T05:02:05Z",
+              "updatedAt": "2024-08-23T05:02:44Z"
+            },
+            {
+              "originalPosition": 33,
+              "body": "Should we link to the section in RFC 9000 that describes this attack?",
+              "createdAt": "2024-08-23T05:02:42Z",
+              "updatedAt": "2024-08-23T05:02:44Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GfZjl",
+          "commit": {
+            "abbreviatedOid": "6add9c0"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T05:17:36Z",
+          "updatedAt": "2024-08-23T05:17:36Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "If sent over the same path, they will only reach the peer if the path is valid, thus will not have an effect on the peer. So, no pollution. But yes, still a volume effect. Maybe that could be said differently",
+              "createdAt": "2024-08-23T05:17:36Z",
+              "updatedAt": "2024-08-23T05:17:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GfZn-",
+          "commit": {
+            "abbreviatedOid": "6add9c0"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T05:17:55Z",
+          "updatedAt": "2024-08-23T05:17:55Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Yes.",
+              "createdAt": "2024-08-23T05:17:55Z",
+              "updatedAt": "2024-08-23T05:17:55Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86Gfcfx",
+          "commit": {
+            "abbreviatedOid": "6add9c0"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-23T05:29:47Z",
+          "updatedAt": "2024-08-23T05:29:47Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "Check the most recent commit please.",
+              "createdAt": "2024-08-23T05:29:47Z",
+              "updatedAt": "2024-08-23T05:29:47Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GffIq",
+          "commit": {
+            "abbreviatedOid": "7a36e85"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "The new text sounds a lot better. I added a few further suggestions.",
+          "createdAt": "2024-08-23T05:40:59Z",
+          "updatedAt": "2024-08-23T05:43:12Z",
+          "comments": [
+            {
+              "originalPosition": 28,
+              "body": "```suggestion\r\nthat the peer will not receive the OBSERVED_ADDRESS frames if the\r\n```",
+              "createdAt": "2024-08-23T05:40:59Z",
+              "updatedAt": "2024-08-23T05:43:12Z"
+            },
+            {
+              "originalPosition": 29,
+              "body": "```suggestion\r\naddresses are not valid, but this does not reduce the number of\r\n```",
+              "createdAt": "2024-08-23T05:41:17Z",
+              "updatedAt": "2024-08-23T05:43:12Z"
+            },
+            {
+              "originalPosition": 34,
+              "body": "```suggestion\r\nQUIC implementations are expected to have sufficient\r\n```",
+              "createdAt": "2024-08-23T05:42:07Z",
+              "updatedAt": "2024-08-23T05:43:12Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\ncaused by such attacks. The same protection logic SHOULD be used to prevent sending of a large number of\r\nspurious OBSERVED_ADDRESS frames.\r\n```",
+              "createdAt": "2024-08-23T05:42:55Z",
+              "updatedAt": "2024-08-23T05:43:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GmuUA",
+          "commit": {
+            "abbreviatedOid": "c105bfc"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-24T02:45:48Z",
+          "updatedAt": "2024-08-24T02:45:48Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOKhxVW855Ea5K",
+      "title": "disallow OBSERVED_ADDRESS frame in Handshake packets",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/25",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #21.",
+      "createdAt": "2024-08-22T03:32:56Z",
+      "updatedAt": "2024-08-22T06:32:50Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "0f36a0e20c3866534dfcc0321f40f81e165512b8",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "no-more-handshake-packets",
+      "headRefOid": "261362b80f67a44d952d19af89d16dec473f9aca",
+      "closedAt": "2024-08-22T06:32:50Z",
+      "mergedAt": "2024-08-22T06:32:50Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "ad0a0e73279c94b9cd2dda5d5f8e050429e38a0e"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86GUu-_",
+          "commit": {
+            "abbreviatedOid": "261362b"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-22T06:13:49Z",
+          "updatedAt": "2024-08-22T06:13:49Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "id": "PR_kwDOKhxVW855MlW3",
+      "title": "Update the TP and frame numbers for draft 04",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/26",
+      "state": "MERGED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I am proposing to do the same kind of change as between draft-02 and draft-03.\r\nWe will cut a new version when we get the shorter numbers from IANA.",
+      "createdAt": "2024-08-23T03:32:18Z",
+      "updatedAt": "2024-08-23T04:30:56Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "ad0a0e73279c94b9cd2dda5d5f8e050429e38a0e",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "draft4-numbers",
+      "headRefOid": "b5d259fd4d27361a1375dc74c6b1ec8f3ae9f82b",
+      "closedAt": "2024-08-23T04:30:56Z",
+      "mergedAt": "2024-08-23T04:30:56Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "8231bc0f2b2b33652fb728830fef965802173ebd"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86GfNYK",
+          "commit": {
+            "abbreviatedOid": "b5d259f"
+          },
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-08-23T04:30:19Z",
+          "updatedAt": "2024-08-23T04:30:19Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
