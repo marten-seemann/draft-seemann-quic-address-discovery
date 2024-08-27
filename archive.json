@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-08-25T00:01:15.446813+00:00",
+  "timestamp": "2024-08-27T00:01:26.065362+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -1061,7 +1061,7 @@
       "labels": [],
       "body": "Fixes #21.",
       "createdAt": "2024-08-22T03:32:56Z",
-      "updatedAt": "2024-08-22T06:32:50Z",
+      "updatedAt": "2024-08-25T13:11:33Z",
       "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
       "baseRefName": "main",
       "baseRefOid": "0f36a0e20c3866534dfcc0321f40f81e165512b8",
@@ -1088,6 +1088,26 @@
           "createdAt": "2024-08-22T06:13:49Z",
           "updatedAt": "2024-08-22T06:13:49Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOKhxVW86GqWqg",
+          "commit": {
+            "abbreviatedOid": "261362b"
+          },
+          "author": "flub",
+          "authorAssociation": "NONE",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2024-08-25T13:11:33Z",
+          "updatedAt": "2024-08-25T13:11:33Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "why not add a note about the 0.5RTT and coalesced packet?  Would that not be helpful guidance for implementers?",
+              "createdAt": "2024-08-25T13:11:33Z",
+              "updatedAt": "2024-08-25T13:11:33Z"
+            }
+          ]
         }
       ]
     },
