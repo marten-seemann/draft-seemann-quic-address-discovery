@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-10T00:01:36.582611+00:00",
+  "timestamp": "2024-09-12T00:01:42.657848+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -472,6 +472,22 @@
           "updatedAt": "2024-08-22T06:52:30Z"
         }
       ]
+    },
+    {
+      "number": 27,
+      "id": "I_kwDOKhxVW86WL6_-",
+      "title": "What happens when the OBSERVED_ADDRESS frame's Sequence Number overflows?",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/27",
+      "state": "OPEN",
+      "author": "flub",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It is theoretically possible that the Sequence Number of an OBSERVED_ADDRESS frame overflows for a connection.  What the implementation should do is left undefined currently as far as I understand.\r\n\r\nGenerally I think QUIC tends to immediately close a connection with an error if a counter overflows.  Is this the right behaviour here as well?  Should it be specified?",
+      "createdAt": "2024-09-11T13:08:15Z",
+      "updatedAt": "2024-09-11T13:08:15Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
