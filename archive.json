@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-12T00:01:42.657848+00:00",
+  "timestamp": "2024-09-15T00:01:20.179665+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -485,9 +485,17 @@
       "labels": [],
       "body": "It is theoretically possible that the Sequence Number of an OBSERVED_ADDRESS frame overflows for a connection.  What the implementation should do is left undefined currently as far as I understand.\r\n\r\nGenerally I think QUIC tends to immediately close a connection with an error if a counter overflows.  Is this the right behaviour here as well?  Should it be specified?",
       "createdAt": "2024-09-11T13:08:15Z",
-      "updatedAt": "2024-09-11T13:08:15Z",
+      "updatedAt": "2024-09-12T19:22:07Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "In theory it could happen, but 2^62 is a really big number -- 18 billions of billions. The event that you describe will not happen before the end of the universe if the server merely increases the counter by 1 for each new address, supposing of course that the connection stays up that long.\r\n\r\nOf course, the roll over could happen if the server deliberately makes it happen, for example by incrementing the counter by 2^60 for each new address. Don't do that.",
+          "createdAt": "2024-09-12T19:22:06Z",
+          "updatedAt": "2024-09-12T19:22:06Z"
+        }
+      ]
     }
   ],
   "pulls": [
