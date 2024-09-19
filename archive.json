@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-17T00:01:18.519584+00:00",
+  "timestamp": "2024-09-19T00:01:25.772473+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -478,15 +478,15 @@
       "id": "I_kwDOKhxVW86WL6_-",
       "title": "What happens when the OBSERVED_ADDRESS frame's Sequence Number overflows?",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/27",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "flub",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "It is theoretically possible that the Sequence Number of an OBSERVED_ADDRESS frame overflows for a connection.  What the implementation should do is left undefined currently as far as I understand.\r\n\r\nGenerally I think QUIC tends to immediately close a connection with an error if a counter overflows.  Is this the right behaviour here as well?  Should it be specified?",
       "createdAt": "2024-09-11T13:08:15Z",
-      "updatedAt": "2024-09-12T19:22:07Z",
-      "closedAt": null,
+      "updatedAt": "2024-09-17T13:20:14Z",
+      "closedAt": "2024-09-17T08:28:14Z",
       "comments": [
         {
           "author": "huitema",
@@ -494,6 +494,27 @@
           "body": "In theory it could happen, but 2^62 is a really big number -- 18 billions of billions. The event that you describe will not happen before the end of the universe if the server merely increases the counter by 1 for each new address, supposing of course that the connection stays up that long.\r\n\r\nOf course, the roll over could happen if the server deliberately makes it happen, for example by incrementing the counter by 2^60 for each new address. Don't do that.",
           "createdAt": "2024-09-12T19:22:06Z",
           "updatedAt": "2024-09-12T19:22:06Z"
+        },
+        {
+          "author": "flub",
+          "authorAssociation": "NONE",
+          "body": "The spec says it MUST be monotonically increased so you're not allowed to jump as I read it.  So yeah, don't do that :)\r\n\r\nThough don't we have to know how we should react if some peer is maliciously increasing this number?",
+          "createdAt": "2024-09-17T07:55:16Z",
+          "updatedAt": "2024-09-17T07:57:37Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "The receiver doesn't care about the absolute value of the sequence number, all it cares about is that it can ignore any frames with a smaller sequence number than the highest received.\r\n\r\nReally, we've discussed this time and time again during the QUIC specification process. As Christian says, 2^62 is a really big number.",
+          "createdAt": "2024-09-17T08:28:15Z",
+          "updatedAt": "2024-09-17T08:28:15Z"
+        },
+        {
+          "author": "flub",
+          "authorAssociation": "NONE",
+          "body": "> Really, we've discussed this time and time again during the QUIC specification process. As Christian says, 2^62 is a really big number.\r\n\r\nIs the rationale for this written down anywhere, maybe in RFC9000 or any related documents?  That could help with understanding the nuances.  This is still something that the type system forces us to make *some* decision on.",
+          "createdAt": "2024-09-17T13:20:12Z",
+          "updatedAt": "2024-09-17T13:20:12Z"
         }
       ]
     }
