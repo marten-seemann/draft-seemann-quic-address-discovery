@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 25 February 2025                           Private Octopus Inc.
-                                                          24 August 2024
+Expires: 15 April 2025                              Private Octopus Inc.
+                                                         12 October 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 February 2025.
+   This Internet-Draft will expire on 15 April 2025.
 
 Copyright Notice
 
@@ -83,7 +83,9 @@ Table of Contents
      6.1.  On the Requester Side
      6.2.  On the Responder Side
    7.  IANA Considerations
-   8.  Normative References
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -249,7 +251,9 @@ Table of Contents
    TODO: fill out registration request for the transport parameter and
    frame types
 
-8.  Normative References
+8.  References
+
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -269,6 +273,8 @@ Table of Contents
               Multiplexed and Secure Transport", RFC 9000,
               DOI 10.17487/RFC9000, May 2021,
               <https://www.rfc-editor.org/rfc/rfc9000>.
+
+8.2.  Informative References
 
    [RFC9287]  Thomson, M., "Greasing the QUIC Bit", RFC 9287,
               DOI 10.17487/RFC9287, August 2022,
