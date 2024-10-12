@@ -153,12 +153,8 @@ receives an OBSERVED_ADDRESS frame.
 An endpoint that negotiated (see {{negotiate-extension}}) this extension and
 offered to provide address observations to the peer MUST send an
 OBSERVED_ADDRESS frame on every new path. This also applies to the path used for
-the QUIC handshake.
-
-The OBSERVED_ADDRESS frame SHOULD be sent as early as possible. However, during
-the handshake an endpoint SHOULD prioritize frames that lead to handshake
-progress (CRYPTO and ACK frames in particular) over sending of the
-OBSERVED_ADDRESS frame.
+the QUIC handshake. The OBSERVED_ADDRESS frame SHOULD be sent as early as
+possible.
 
 For paths used after completion of the handshake, endpoints SHOULD bundle the
 OBSERVED_ADDRESS frame with probing packets. This is possible, since the frame
