@@ -67,7 +67,7 @@ advantages:
    QUIC connection ID. Depending on the architecture, not using STUN might
    simplify the routing logic.
 3. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
-   implementations can enable QUIC bit greasing ({{!RFC9287}}).
+   implementations can enable QUIC bit greasing ({{?RFC9287}}).
 
 # Conventions and Definitions
 
