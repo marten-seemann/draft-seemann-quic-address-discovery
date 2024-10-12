@@ -1339,19 +1339,16 @@ receives an OBSERVED_ADDRESS frame.<a href="#section-4.1-5" class="pilcrow">¶</
 <p id="section-5-1">An endpoint that negotiated (see <a href="#negotiate-extension" class="auto internal xref">Section 3</a>) this extension and
 offered to provide address observations to the peer <span class="bcp14">MUST</span> send an
 OBSERVED_ADDRESS frame on every new path. This also applies to the path used for
-the QUIC handshake.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">The OBSERVED_ADDRESS frame <span class="bcp14">SHOULD</span> be sent as early as possible. However, during
-the handshake an endpoint <span class="bcp14">SHOULD</span> prioritize frames that lead to handshake
-progress (CRYPTO and ACK frames in particular) over sending of the
-OBSERVED_ADDRESS frame.<a href="#section-5-2" class="pilcrow">¶</a></p>
-<p id="section-5-3">For paths used after completion of the handshake, endpoints <span class="bcp14">SHOULD</span> bundle the
+the QUIC handshake. The OBSERVED_ADDRESS frame <span class="bcp14">SHOULD</span> be sent as early as
+possible.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">For paths used after completion of the handshake, endpoints <span class="bcp14">SHOULD</span> bundle the
 OBSERVED_ADDRESS frame with probing packets. This is possible, since the frame
-is defined to be a probing frame (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>).<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">Additionally, the sender <span class="bcp14">SHOULD</span> send an OBSERVED_ADDRESS frame when it detects a
+is defined to be a probing frame (<span><a href="https://rfc-editor.org/rfc/rfc9000#section-8.2" class="relref">Section 8.2</a> of [<a href="#RFC9000" class="cite xref">RFC9000</a>]</span>).<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">Additionally, the sender <span class="bcp14">SHOULD</span> send an OBSERVED_ADDRESS frame when it detects a
 change in the remote address on an existing path. This could be indicative of a
 NAT rebinding. However, the sender <span class="bcp14">MAY</span> limit the rate at which OBSERVED_ADDRESS
 frames are produced, to mitigate the spoofed packets attack described in
-<a href="#responder-side-security" class="auto internal xref">Section 6.2</a>.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<a href="#responder-side-security" class="auto internal xref">Section 6.2</a>.<a href="#section-5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
