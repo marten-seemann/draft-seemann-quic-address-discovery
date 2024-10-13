@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-10T00:01:23.127803+00:00",
+  "timestamp": "2024-10-13T00:01:29.851748+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -1194,6 +1194,110 @@
           "body": "",
           "createdAt": "2024-08-23T04:30:19Z",
           "updatedAt": "2024-08-23T04:30:19Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOKhxVW85-Y8W4",
+      "title": "make QUIC bit greasing (RFC 9287) a non-normative reference",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/28",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-10-12T01:18:19Z",
+      "updatedAt": "2024-10-12T01:54:30Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "96bc34902d3ae695e38d623b72796497eea039a8",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "quic-bit-greasing-non-normative",
+      "headRefOid": "20798fddf14427512c3f0ea57ddb70b3d62c50ed",
+      "closedAt": "2024-10-12T01:54:30Z",
+      "mergedAt": "2024-10-12T01:54:30Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "9cea7709c09d06c75aa83a48624cbca1f50f2b6b"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86M42kM",
+          "commit": {
+            "abbreviatedOid": "20798fd"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-12T01:52:42Z",
+          "updatedAt": "2024-10-12T01:52:42Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "PR_kwDOKhxVW85-Y86g",
+      "title": "OBSERVED_ADDRESS cannot be sent during the handshake",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/29",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This should probably have been part of #25.",
+      "createdAt": "2024-10-12T01:23:18Z",
+      "updatedAt": "2024-10-12T01:59:56Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "96bc34902d3ae695e38d623b72796497eea039a8",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "no-observed-address-during-handshake",
+      "headRefOid": "3c1b8b7d557f147fcbd558df2049f84179c884c3",
+      "closedAt": "2024-10-12T01:59:56Z",
+      "mergedAt": "2024-10-12T01:59:56Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "2910a12d8f0a2de7cca2ac9c25e0c6a63f908a58"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86M42pl",
+          "commit": {
+            "abbreviatedOid": "3c1b8b7"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-12T01:54:45Z",
+          "updatedAt": "2024-10-12T01:54:53Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "Yes. We only send these frames in 1RTT packets, so there is little need to specify timing.",
+              "createdAt": "2024-10-12T01:54:45Z",
+              "updatedAt": "2024-10-12T01:54:53Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKhxVW86M42un",
+          "commit": {
+            "abbreviatedOid": "3c1b8b7"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-10-12T01:55:32Z",
+          "updatedAt": "2024-10-12T01:55:32Z",
           "comments": []
         }
       ]
