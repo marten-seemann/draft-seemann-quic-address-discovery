@@ -286,7 +286,7 @@ Table of Contents
 Acknowledgments
 
    Unbeknownst to the authors, the idea of moving address discovery into
-   QUIC was conveived of before in [I-D.pauly-quic-address-extension]
+   QUIC was conveived of before in [I-D.pauly-quic-address-extension].
 
 Authors' Addresses
 
