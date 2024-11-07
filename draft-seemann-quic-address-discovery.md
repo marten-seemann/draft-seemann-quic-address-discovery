@@ -210,4 +210,4 @@ TODO: fill out registration request for the transport parameter and frame types
 {:numbered="false"}
 
 Unbeknownst to the authors, the idea of moving address discovery into QUIC was
-conveived of before in {{?I-D.pauly-quic-address-extension}}
+conveived of before in {{?I-D.pauly-quic-address-extension}}.
