@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-05T00:01:20.923525+00:00",
+  "timestamp": "2024-11-07T00:01:24.283739+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -517,6 +517,38 @@
           "updatedAt": "2024-09-17T13:20:12Z"
         }
       ]
+    },
+    {
+      "number": 30,
+      "id": "I_kwDOKhxVW86dOhul",
+      "title": "acknowledge draft-pauly-quic-address-extension",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/30",
+      "state": "OPEN",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "David Schinazi suggested acknowledging https://datatracker.ietf.org/doc/draft-pauly-quic-address-extension/. I was not aware of this draft when I wrote up the first version of my draft (as far as I can tell, it was never discussed on the QUIC mailing list), but the idea is quite similar.",
+      "createdAt": "2024-11-06T11:30:51Z",
+      "updatedAt": "2024-11-06T11:30:51Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOKhxVW86dQngO",
+      "title": "Really Need Configurable Behavior?",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/31",
+      "state": "OPEN",
+      "author": "nibanks",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Right now the transport parameter allows for configurable behavior as such:\r\n\r\n```\r\n* 0: The node is willing to provide address observations to its peer, but is not\r\n  interested in receiving address observations itself.\r\n* 1: The node is interested in receiving address observations, but it is not\r\n  willing to provide address observations.\r\n* 2: The node is interested in receiving address observations, and it is willing\r\n  to provide address observations.\r\n```\r\n\r\nIt's obviously simpler to implement if it's just always on (if supported). What is the desire behind supporting a configurable behavior like this, considering these frames will be exchanged so infrequently? I understand servers might not need addresses from the client, but it would want to support sending them. But the implementation cost (IMO) isn't worth saving a few bytes from the client.\r\n\r\nMy preference would be a zero payload TP that indicates I support sending and receiving the addresses.",
+      "createdAt": "2024-11-06T15:11:08Z",
+      "updatedAt": "2024-11-06T15:11:08Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
