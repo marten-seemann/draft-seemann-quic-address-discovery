@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 15 April 2025                              Private Octopus Inc.
-                                                         12 October 2024
+Expires: 12 May 2025                                Private Octopus Inc.
+                                                         8 November 2024
 
 
                          QUIC Address Discovery
@@ -55,7 +55,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2025.
+   This Internet-Draft will expire on 12 May 2025.
 
 Copyright Notice
 
@@ -272,13 +272,21 @@ Table of Contents
 
 8.2.  Informative References
 
+   [I-D.pauly-quic-address-extension]
+              Pauly, T., Wood, C. A., and E. Kinnear, "QUIC Address
+              Extension", Work in Progress, Internet-Draft, draft-pauly-
+              quic-address-extension-00, 11 March 2019,
+              <https://datatracker.ietf.org/doc/html/draft-pauly-quic-
+              address-extension-00>.
+
    [RFC9287]  Thomson, M., "Greasing the QUIC Bit", RFC 9287,
               DOI 10.17487/RFC9287, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9287>.
 
 Acknowledgments
 
-   TODO acknowledge.
+   Unbeknownst to the authors, the idea of moving address discovery into
+   QUIC was conveived of before in [I-D.pauly-quic-address-extension].
 
 Authors' Addresses
 
