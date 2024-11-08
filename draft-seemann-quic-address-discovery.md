@@ -209,4 +209,5 @@ TODO: fill out registration request for the transport parameter and frame types
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+Unbeknownst to the authors, the idea of moving address discovery into QUIC was
+conveived of before in {{?I-D.pauly-quic-address-extension}}.
