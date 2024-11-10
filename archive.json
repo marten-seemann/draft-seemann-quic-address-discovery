@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-07T00:01:24.283739+00:00",
+  "timestamp": "2024-11-10T00:01:22.905533+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -369,7 +369,7 @@
       "labels": [],
       "body": "A 2-byte code point would be nice.",
       "createdAt": "2024-08-20T05:07:50Z",
-      "updatedAt": "2024-08-24T05:20:38Z",
+      "updatedAt": "2024-11-08T08:24:44Z",
       "closedAt": null,
       "comments": [
         {
@@ -385,6 +385,34 @@
           "body": "I agree. We can always change code points and bump the draft version.",
           "createdAt": "2024-08-24T05:20:37Z",
           "updatedAt": "2024-08-24T05:20:37Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "@nibanks had a suggestion for a particular 2-byte code points. Would you mind posting them here?",
+          "createdAt": "2024-11-07T11:03:45Z",
+          "updatedAt": "2024-11-07T11:03:45Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "NONE",
+          "body": "I started implementing this in msquic and I just shortened what you had to:\r\n```c\r\n    QUIC_FRAME_OBSERVED_ADDRESS_V4  = 0x9f81ULL,\r\n    QUIC_FRAME_OBSERVED_ADDRESS_V6  = 0x9f82ULL,\r\n```",
+          "createdAt": "2024-11-07T11:14:29Z",
+          "updatedAt": "2024-11-07T11:14:29Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@nibanks these numbers are larger than 2^14, and will be encoded on 4 bytes. If we want two bytes, we should use something like:\r\n```c\r\n    QUIC_FRAME_OBSERVED_ADDRESS_V4  = 0x1f81ULL,\r\n    QUIC_FRAME_OBSERVED_ADDRESS_V6  = 0x1f82ULL,\r\n```",
+          "createdAt": "2024-11-07T23:01:15Z",
+          "updatedAt": "2024-11-07T23:01:15Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "NONE",
+          "body": "Ah, you're right. I'm fine with those values you suggest.",
+          "createdAt": "2024-11-08T08:24:43Z",
+          "updatedAt": "2024-11-08T08:24:43Z"
         }
       ]
     },
@@ -523,16 +551,24 @@
       "id": "I_kwDOKhxVW86dOhul",
       "title": "acknowledge draft-pauly-quic-address-extension",
       "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/30",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "marten-seemann",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "David Schinazi suggested acknowledging https://datatracker.ietf.org/doc/draft-pauly-quic-address-extension/. I was not aware of this draft when I wrote up the first version of my draft (as far as I can tell, it was never discussed on the QUIC mailing list), but the idea is quite similar.",
       "createdAt": "2024-11-06T11:30:51Z",
-      "updatedAt": "2024-11-06T11:30:51Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-11-08T08:31:37Z",
+      "closedAt": "2024-11-08T08:31:36Z",
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes. It is indeed similar, and deserves to be acknowledged.",
+          "createdAt": "2024-11-07T05:38:50Z",
+          "updatedAt": "2024-11-07T05:38:50Z"
+        }
+      ]
     },
     {
       "number": 31,
@@ -546,9 +582,105 @@
       "labels": [],
       "body": "Right now the transport parameter allows for configurable behavior as such:\r\n\r\n```\r\n* 0: The node is willing to provide address observations to its peer, but is not\r\n  interested in receiving address observations itself.\r\n* 1: The node is interested in receiving address observations, but it is not\r\n  willing to provide address observations.\r\n* 2: The node is interested in receiving address observations, and it is willing\r\n  to provide address observations.\r\n```\r\n\r\nIt's obviously simpler to implement if it's just always on (if supported). What is the desire behind supporting a configurable behavior like this, considering these frames will be exchanged so infrequently? I understand servers might not need addresses from the client, but it would want to support sending them. But the implementation cost (IMO) isn't worth saving a few bytes from the client.\r\n\r\nMy preference would be a zero payload TP that indicates I support sending and receiving the addresses.",
       "createdAt": "2024-11-06T15:11:08Z",
-      "updatedAt": "2024-11-06T15:11:08Z",
+      "updatedAt": "2024-11-07T11:18:07Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "In addition to public servers not being interested in receiving address observations, you might not be able to do so either, for example if you're the endpoint of a CONNECT-UDP connection.\r\n\r\nYou will know that this is the case, since you're the client who established the CONNECT-UDP connection, and you'd set the corresponding mode for the address discovery extension.",
+          "createdAt": "2024-11-07T11:06:12Z",
+          "updatedAt": "2024-11-07T11:06:12Z"
+        },
+        {
+          "author": "nibanks",
+          "authorAssociation": "NONE",
+          "body": "That makes sense. I think we'll ultimately not be able to simplify this further. Though, I did have one thought: What if it was simplified and you only _actually_ sent something if you could? What is the impact of not sending an observed address, even if the peer wants you to (and thinks you should) send it? ",
+          "createdAt": "2024-11-07T11:18:05Z",
+          "updatedAt": "2024-11-07T11:18:05Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOKhxVW86dWtEx",
+      "title": "Add motivation paragraph in introduction",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/32",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "huitema"
+      ],
+      "labels": [],
+      "body": "\r\nFrom the logs of the Zulip chatroom:\r\n\r\nFrom | Text\r\n-----|-----\r\nMartin Thomson | That STUN argument is not a good one.  Is there a better argument for using QUIC?  It seems like there might be.\r\nMartin Thomson | _That STUN argument_ refers to the argument that Marten used to argue against using STUN.\r\nChristian Huitema | Martin: I like that we can have address discovery potentially with ANY server. It is good for P2P, because of \"don't stick out\". But it can also be used for debug, etc.\r\nMartin Thomson | Christian: that's a good one.\r\nMartin Thomson | I think that the authentication in STUN is also particularly complex for this purpose.\r\nMartin Thomson | STUN relies on shared keys, which would mean the use of exporters or something like that.\r\nChristian Huitema | Yes, having everything encrypted is a also a huge plus.",
+      "createdAt": "2024-11-07T05:59:23Z",
+      "updatedAt": "2024-11-07T22:57:26Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "@huitema Can you propose some text?",
+          "createdAt": "2024-11-07T11:10:14Z",
+          "updatedAt": "2024-11-07T11:10:14Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Will do.",
+          "createdAt": "2024-11-07T22:57:25Z",
+          "updatedAt": "2024-11-07T22:57:25Z"
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "I_kwDOKhxVW86dWunr",
+      "title": "Load balancing gateway",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/33",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From the minutes of the QUIc WG session at IETF 121:\r\n\r\nJaroslav??: If you have a client is on path that uses per packet load-balancing. Here you would receive this frame per packet. Rate limiting?\r\n\r\nMarten: You describe a NAT rebinding that happens very often (looks like that to the server). RFC 9000 sees this as an attack. Do the same thing as for path validation.\r\n\r\n",
+      "createdAt": "2024-11-07T06:04:04Z",
+      "updatedAt": "2024-11-07T11:02:57Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "Was this resolved by #23?",
+          "createdAt": "2024-11-07T11:02:57Z",
+          "updatedAt": "2024-11-07T11:02:57Z"
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "id": "I_kwDOKhxVW86dWu3Q",
+      "title": "Layers of NATs and proxies",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/34",
+      "state": "OPEN",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "From the minutes of QUIc at IETF 121\r\n\r\nLorenzo C: What if the Masque server does not have a public IP. Would you use STUN with this?\r\n\r\nMarten: You could chain proxies\u2026 you would need to deal with this. Use of multiple nodes\u2026",
+      "createdAt": "2024-11-07T06:04:52Z",
+      "updatedAt": "2024-11-07T11:02:16Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "There's nothing much we can do about this situation, and you have the exact same problem when using STUN.\r\n\r\nMaybe we should point out that different endpoints might observe different addresses?",
+          "createdAt": "2024-11-07T11:02:15Z",
+          "updatedAt": "2024-11-07T11:02:15Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -1330,6 +1462,61 @@
           "body": "",
           "createdAt": "2024-10-12T01:55:32Z",
           "updatedAt": "2024-10-12T01:55:32Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "id": "PR_kwDOKhxVW86BK8bL",
+      "title": "acknowledge draft-pauly-quic-address-extension",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/36",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-11-07T11:01:07Z",
+      "updatedAt": "2024-11-08T08:31:36Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2910a12d8f0a2de7cca2ac9c25e0c6a63f908a58",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "pauly-quic-address-extension",
+      "headRefOid": "d0767a31121f02126bb4516f6250b8da98bde44e",
+      "closedAt": "2024-11-08T08:31:36Z",
+      "mergedAt": "2024-11-08T08:31:36Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "2c8ff0314d8e1fb2240d810a6d85648ab3e680c7"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86QUu8W",
+          "commit": {
+            "abbreviatedOid": "d0767a3"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-11-07T15:38:18Z",
+          "updatedAt": "2024-11-07T15:38:18Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOKhxVW86QUwzJ",
+          "commit": {
+            "abbreviatedOid": "d0767a3"
+          },
+          "author": "nibanks",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-11-07T15:41:04Z",
+          "updatedAt": "2024-11-07T15:41:04Z",
           "comments": []
         }
       ]
