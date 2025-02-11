@@ -3,9 +3,10 @@
 
 
 QUIC                                                          M. Seemann
-Internet-Draft                                           12 October 2024
-Intended status: Standards Track                                        
-Expires: 15 April 2025
+Internet-Draft                                                          
+Intended status: Standards Track                              C. Huitema
+Expires: 15 August 2025                             Private Octopus Inc.
+                                                        11 February 2025
 
 
                          QUIC Address Discovery
@@ -54,11 +55,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 April 2025.
+   This Internet-Draft will expire on 15 August 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -82,9 +83,11 @@ Table of Contents
      6.1.  On the Requester Side
      6.2.  On the Responder Side
    7.  IANA Considerations
-   8.  Normative References
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
-   Author's Address
+   Authors' Addresses
 
 1.  Introduction
 
@@ -117,7 +120,7 @@ Table of Contents
 3.  Negotiating Extension Use
 
    Endpoints advertise their support of the extension by sending the
-   address_discovery (0x9f81a175) transport parameter (Section 7.4 of
+   address_discovery (0x9f81a176) transport parameter (Section 7.4 of
    [RFC9000]) with a variable-length integer value.  The value
    determines the behavior with respect to address discovery:
 
@@ -148,13 +151,23 @@ Table of Contents
 4.1.  OBSERVED_ADDRESS
 
    OBSERVED_ADDRESS Frame {
-       Type (i) = 0x9f81a4..0x9f81a5,
+       Type (i) = 0x9f81a6..0x9f81a7,
+       Sequence Number (i),
        [ IPv4 (32) ],
        [ IPv6 (128) ],
        Port (16),
    }
 
    The OBSERVED_ADDRESS frame contains the following fields:
+
+   Sequence Number:  A variable-length integer specifying the sequence
+      number assigned for this OBSERVED_ADDRESS frame.  The sequence
+      number MUST be monotonically increasing for OBSERVED_ADDRESS frame
+      in the same connection.  Frames may be received out of order.  A
+      peer SHOULD ignore an incoming OBSERVED_ADDRESS frame if it
+      previously received another OBSERVED_ADDRESS frame for the same
+      path with a Sequence Number equal to or higher than the sequence
+      number of the incoming frame.
 
    IPv4:  The IPv4 address.  Only present if the least significant bit
       of the frame type is 0.
@@ -164,11 +177,11 @@ Table of Contents
 
    Port:  The port number, in network byte order.
 
-   This frame MUST only appear in the handshake and in the application
-   data packet number space.  It is a "probing frame" as defined in
-   Section 9.1 of [RFC9000].  OBSERVED_ADDRESS frames are ack-eliciting,
-   and SHOULD be retransmitted if lost.  Retransmissions MUST happen on
-   the same path as the original frame was sent on.
+   This frame MUST only appear in the application data packet number
+   space.  It is a "probing frame" as defined in Section 9.1 of
+   [RFC9000].  OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be
+   retransmitted if lost.  Retransmissions MUST happen on the same path
+   as the original frame was sent on.
 
    An endpoint MUST NOT send an OBSERVED_ADDRESS frame to a node that
    did not request the receipt of address observations as described in
@@ -191,7 +204,9 @@ Table of Contents
 
    Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when
    it detects a change in the remote address on an existing path.  This
-   could be indicative of a NAT rebindings.
+   could be indicative of a NAT rebinding.  However, the sender MAY
+   limit the rate at which OBSERVED_ADDRESS frames are produced, to
+   mitigate the spoofed packets attack described in Section 6.2.
 
 6.  Security Considerations
 
@@ -211,12 +226,30 @@ Table of Contents
    reveal details about the internal network.  In these cases, the node
    SHOULD NOT offer to provide address observations.
 
+   On-path attackers could capture packets sent from the requester to
+   the responder, and resend them from a spoofed source address.  If
+   done repeatedly, these spoofed packets could trigger the sending of a
+   large number of OBSERVED_ADDRESS frames.  The recommendation to only
+   include OBSERVED_ADDRESS frames in packets sent on the same path over
+   which the address was observed ensures that the peer will not receive
+   the OBSERVED_ADDRESS frames if the addresses are not valid, but this
+   does not reduce the number of packets sent over the network.  The
+   attack also has the effect of causing spurious detection NAT
+   rebinding, and is a variant of the replacement of addresses of
+   packets mentioned in Section 21.1.1.3 of [RFC9000].  QUIC
+   implementations are expected to have sufficient protection against
+   spurious NAT rebinding to limit the incidental traffic caused by such
+   attacks.  The same protection logic SHOULD be used to prevent sending
+   of a large number of spurious OBSERVED_ADDRESS frames.
+
 7.  IANA Considerations
 
    TODO: fill out registration request for the transport parameter and
    frame types
 
-8.  Normative References
+8.  References
+
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -237,15 +270,30 @@ Table of Contents
               DOI 10.17487/RFC9000, May 2021,
               <https://www.rfc-editor.org/rfc/rfc9000>.
 
+8.2.  Informative References
+
+   [I-D.pauly-quic-address-extension]
+              Pauly, T., Wood, C. A., and E. Kinnear, "QUIC Address
+              Extension", Work in Progress, Internet-Draft, draft-pauly-
+              quic-address-extension-00, 11 March 2019,
+              <https://datatracker.ietf.org/doc/html/draft-pauly-quic-
+              address-extension-00>.
+
    [RFC9287]  Thomson, M., "Greasing the QUIC Bit", RFC 9287,
               DOI 10.17487/RFC9287, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9287>.
 
 Acknowledgments
 
-   TODO acknowledge.
+   Unbeknownst to the authors, the idea of moving address discovery into
+   QUIC was conveived of before in [I-D.pauly-quic-address-extension].
 
-Author's Address
+Authors' Addresses
 
    Marten Seemann
    Email: martenseemann@gmail.com
+
+
+   Christian Huitema
+   Private Octopus Inc.
+   Email: huitema@huitema.net
