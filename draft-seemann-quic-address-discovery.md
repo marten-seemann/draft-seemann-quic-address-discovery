@@ -117,7 +117,7 @@ The OBSERVED_ADDRESS frame contains the following fields:
 Sequence Number:
 : A variable-length integer specifying the sequence number assigned for
   this OBSERVED_ADDRESS frame. The sequence
-  number MUST be monotonically increasing for OBSERVED_ADDRESS frame in the same connection.
+  number MUST be monotonically increasing for OBSERVED_ADDRESS frames in the same connection.
   Frames may be received out of order. A peer SHOULD ignore an incoming
   OBSERVED_ADDRESS frame if it previously received another OBSERVED_ADDRESS frame
   for the same path with a Sequence Number equal to or higher than the
