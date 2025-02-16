@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T00:01:18.661860+00:00",
+  "timestamp": "2025-02-16T00:01:30.244707+00:00",
   "repo": "marten-seemann/draft-seemann-quic-address-discovery",
   "labels": [
     {
@@ -679,6 +679,141 @@
           "body": "There's nothing much we can do about this situation, and you have the exact same problem when using STUN.\r\n\r\nMaybe we should point out that different endpoints might observe different addresses?",
           "createdAt": "2024-11-07T11:02:15Z",
           "updatedAt": "2024-11-07T11:02:15Z"
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "id": "I_kwDOKhxVW86pqePh",
+      "title": "This document is UNSAF",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/39",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "There's a lot of material in the RFC series about this particular space, yet the document presently mentions none of that work.  This is not so much about citing sources as in demonstrating that this isn't re-implementing easily avoidable mistakes and using those resources to make this better.\n\nUNilateral Self-Address Fixing (UNSAF) is a concept in [RFC 3424](https://datatracker.ietf.org/doc/html/rfc3424), which goes over some of the important considerations in this area.\n\nAlso, this isn't a public address, but a reflexive \\[transport] address.  At least that is the term used by STUN in [RFC 5389](https://datatracker.ietf.org/doc/html/rfc5389).",
+      "createdAt": "2025-02-11T20:51:16Z",
+      "updatedAt": "2025-02-12T05:30:36Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "My personal opinion is that [RFC3434 ](https://datatracker.ietf.org/doc/html/rfc3424) did more harm than good. It seems motivated by two opposite reasons, one not liking NAT as a concept and the other liking NAT as a firewall and not liking applications doing their own thing through them. The bias shows in picking the acronym \"UNSAF\", which is kind of like attaching a slur to a class of solutions. Note that the recommendation that \"Use of these workarounds MUST be considered transitional in IETF protocols, and a better architectural solution is being sought.\" That was written 23 years ago. I wonder what the search of a better architectural solution produced in that interval. The only practical result of RFC 3424 is that for a period all RFCs touching the subject were supposed to add an \"IAB considerations\" section, and swear on their pinky that they were defining a provisional transition mechanism -- look for example at the 3 pages long \"IAB Considerations\" section in RFC 5245, which feel like \"OK, IAB, here is your pound of flesh\". @martinthomson, if you really insist, we could indeed add an \"IAB consideration\" section that would point to RFC 5245.\n\nThat being said, I thought that yes, we should use \"reflexive address\" throughout the document. I thought we did, but I was probably mistaken.",
+          "createdAt": "2025-02-11T22:31:55Z",
+          "updatedAt": "2025-02-11T22:37:22Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "Yeah, I'm not saying that you need to add their silly IAB considerations thing, just to acknowledge that this is what you are doing.",
+          "createdAt": "2025-02-12T01:40:01Z",
+          "updatedAt": "2025-02-12T01:40:01Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I just checked. We are indeed using \"reflexive address\" throughout the document. There is only one leftover \"public address\" in the whole document, but it is in the abstract. Missed that in the previous pass. Will fix.",
+          "createdAt": "2025-02-12T05:30:35Z",
+          "updatedAt": "2025-02-12T05:30:35Z"
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "id": "I_kwDOKhxVW86psUSe",
+      "title": "Two frames",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/40",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "It might be easier to present this as follows:\n\n```\nOBSERVED_ADDRESS_V4 Frame {\n    Type (i) = 0x9f81a6,\n    Sequence Number (i),\n    IPv4 (32),\n    Port (16),\n}\nOBSERVED_ADDRESS_V6 Frame {\n    Type (i) = 0x9f81a7,\n    Sequence Number (i),\n    IPv6 (128),\n    Port (16),\n}\n```\n\nYes, this raises the question about whether the sequence numbers are taken from the same space or not (can you send a v4 frame with the same sequence number as a v6 frame), but I think that's already an open question.  I just find this less ambiguous, because you don't have to think about whether you might have none (or both) of the IP addresses.",
+      "createdAt": "2025-02-12T01:43:03Z",
+      "updatedAt": "2025-02-12T09:42:05Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "An endpoint using multiple paths could well use a different source IP address for each path. The observed address can be associated with a path, see the discussion in 5, address discovery, \"endpoints SHOULD bundle the OBSERVED_ADDRESS frame with probing packets\". This get a bit more complex with NAT, because we can have several successive mappings for the same path. The sequence number allows endpoint distinguish the latest reflexive address for a given path. With potential 6to4 NAT, it might be better to keep a single sequence for both V4 and V6.",
+          "createdAt": "2025-02-12T05:54:17Z",
+          "updatedAt": "2025-02-12T06:02:03Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "That's what I figured as well.  The issue exists so that you can write that into the spec :)",
+          "createdAt": "2025-02-12T09:42:04Z",
+          "updatedAt": "2025-02-12T09:42:04Z"
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "id": "I_kwDOKhxVW86psV_o",
+      "title": "Simpler negotiation",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/issues/41",
+      "state": "OPEN",
+      "author": "martinthomson",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "I like the design overall, but I find the transport parameter needlessly complex.\n\nHere's a simpler design proposal:\n\n0. The transport parameter is made empty.\n1. Endpoints advertise the transport parameter if they understand the transport parameter AND they want to receive the frame.\n2. Endpoints can send the frame if their peer sends the transport parameter.\n\nThat's it.\n\nLooking at the existing proposal:\n\n* A value of 0 might as well not be signaled at all.\n* A value of 1 and 2 both are achieved by the above proposal by including the transport parameter.\n* The aspect of 1 where an endpoint is not willing to send the frame is achieved by not sending the frame.\n\nI understand that endpoints might want to know in advance whether a peer is going to send the frame to them.  The design I propose doesn't achieve that.  Receiving the frame does.  If endpoints that are willing to send the frame send the frame (which can be done as soon as application data keys are available) that uncertainty goes away.",
+      "createdAt": "2025-02-12T01:49:56Z",
+      "updatedAt": "2025-02-15T07:26:32Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I wonder whether tracking \"did the peer send a frame\" is simpler than \"did the peer set the bit in the TP\".\n\nIf we follow your design, we need to add some text such as \"if the peer accepts address discovery frames and the local endpoint supports them, it should send an address discovery frame promptly after the beginning of the connection.\" And deal with the morass hiding behind \"promptly\".",
+          "createdAt": "2025-02-12T06:09:53Z",
+          "updatedAt": "2025-02-12T06:09:53Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "Yes, \"promptly\".  (I would prioritize this lower than some of the other frame types, which might mean that \"prompt\" means \"eventually\".\n\nWe have a similar concern with HANDSHAKE_DONE and we somehow muddle through, so that wouldn't bother me even if it was \"eventually\" in practice.  I'd have said that if you are tracking the observed/reflexive addresses you have received, then you have the information you need if you care about receiving that information if another path opened up.",
+          "createdAt": "2025-02-12T09:45:14Z",
+          "updatedAt": "2025-02-12T09:45:14Z"
+        },
+        {
+          "author": "flub",
+          "authorAssociation": "NONE",
+          "body": "This change would make it a bit annoying to figure out when to give up on a peer if you only connect because you want to get an address.  \"promptly\" or \"eventually\" are... vague.  The original design makes it very simple to make that decision and you can disconnect if the peer does not want to send you the discovered address.",
+          "createdAt": "2025-02-13T12:11:45Z",
+          "updatedAt": "2025-02-13T12:11:45Z"
+        },
+        {
+          "author": "martinthomson",
+          "authorAssociation": "NONE",
+          "body": "I seriously doubt that this is how you would operate in practice.  Peers who support this will likely indicate a willingness to receive the frame.\n\nSeparately, many of the deployments that I would consider useful here are essentially static.  That is, you know that this particular server supports the feature, therefore you integrate it into your process for managing NAT traversal.",
+          "createdAt": "2025-02-13T22:40:34Z",
+          "updatedAt": "2025-02-13T22:40:34Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Of course, even if a server sets a bit to promise that it will send discovery frames, that does not mean that it will actually do it \"immediately\". But then, not setting the bit means that there is no point waiting for the frame, and that's valuable information.",
+          "createdAt": "2025-02-14T04:27:32Z",
+          "updatedAt": "2025-02-14T04:27:32Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "I see @martinthomson\u2019s concern about the added complexity, but I\u2019m curious how significant it is in practice.\n\nFor those who\u2019ve implemented the draft: What complexity did you encounter beyond simply replacing a bool with an enum?",
+          "createdAt": "2025-02-15T02:33:17Z",
+          "updatedAt": "2025-02-15T02:33:17Z"
+        },
+        {
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I did not find that overly complex. Here is the actual code in picoquic:\n~~~\n                case picoquic_tp_address_discovery: {\n                    uint64_t address_discovery_mode =\n                        picoquic_transport_param_varint_decode(cnx, bytes + byte_index, extension_length, &ret);\n                    if (ret == 0) {\n                        if (address_discovery_mode > 2) {\n                            ret = picoquic_connection_error_ex(cnx, PICOQUIC_TRANSPORT_PARAMETER_ERROR, 0, \"Address discovery parameter\");\n                        }\n                        else {\n                            /* After doing +1, we get the following:\n                            * address_discovery_mode == 0: nothing goes (TP is absent)\n                            * address_discovery_mode == 1: send only (TP value 0)\n                            * address_discovery_mode == 2: receive only (TP value 1)\n                            * address_discovery_mode == 3: both (TP value 2)\n                            */\n                            cnx->remote_parameters.address_discovery_mode = (int)(address_discovery_mode + 1);\n                            cnx->is_address_discovery_provider = ((cnx->remote_parameters.address_discovery_mode & 2) != 0 &&\n                                (cnx->local_parameters.address_discovery_mode & 1) != 0);\n                            cnx->is_address_discovery_receiver = ((cnx->remote_parameters.address_discovery_mode & 1) != 0 &&\n                                (cnx->local_parameters.address_discovery_mode & 2) != 0);\n                        }\n                    }\n                    break;\n                }\n~~~\nBut yes, a boolean is simpler. See for example the equivalent code for enabling greasing of the Quic bit:\n~~~\n                case picoquic_tp_grease_quic_bit:\n                    if (extension_length != 0) {\n                        ret = picoquic_connection_error_ex(cnx, PICOQUIC_TRANSPORT_PARAMETER_ERROR, 0, \"Grease TP\");\n                    }\n                    else {\n                        cnx->remote_parameters.do_grease_quic_bit = 1;\n                    }\n                    break;\n~~~",
+          "createdAt": "2025-02-15T07:26:31Z",
+          "updatedAt": "2025-02-15T07:26:31Z"
         }
       ]
     }
@@ -1517,6 +1652,138 @@
           "body": "",
           "createdAt": "2024-11-07T15:41:04Z",
           "updatedAt": "2024-11-07T15:41:04Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "id": "PR_kwDOKhxVW86Kv85l",
+      "title": "Minor singular/plural change",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/37",
+      "state": "MERGED",
+      "author": "hawkinsw",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I think that frames should be plural here.",
+      "createdAt": "2025-02-11T06:24:19Z",
+      "updatedAt": "2025-02-13T01:17:36Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2c8ff0314d8e1fb2240d810a6d85648ab3e680c7",
+      "headRepository": "hawkinsw/draft-seemann-quic-address-discovery",
+      "headRefName": "patch-1",
+      "headRefOid": "a2c5b08e3820279aa20d7aff471b6dffd12769f4",
+      "closedAt": "2025-02-13T01:17:36Z",
+      "mergedAt": "2025-02-13T01:17:36Z",
+      "mergedBy": "marten-seemann",
+      "mergeCommit": {
+        "oid": "ff92eb0183f6f9b40a132ade549b25aad825473f"
+      },
+      "comments": [
+        {
+          "author": "hawkinsw",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "Really great proposal. I hope that this minor PR helps. I am going to take a whack at implementing in quiche -- not sure about the timeline, but I will do my best. Thank you, again, for a great proposal!\r\nWill",
+          "createdAt": "2025-02-11T06:25:07Z",
+          "updatedAt": "2025-02-11T06:25:07Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "OWNER",
+          "body": "> Really great proposal. I hope that this minor PR helps. I am going to take a whack at implementing in quiche -- not sure about the timeline, but I will do my best. \r\n\r\nThank you @hawkinsw!\r\nHappy to hear that! Would you mind responding something like this on the adoption call on the mailing list?",
+          "createdAt": "2025-02-12T00:56:08Z",
+          "updatedAt": "2025-02-12T00:56:08Z"
+        },
+        {
+          "author": "hawkinsw",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> > Really great proposal. I hope that this minor PR helps. I am going to take a whack at implementing in quiche -- not sure about the timeline, but I will do my best.\r\n> \r\n> Thank you @hawkinsw! Happy to hear that! Would you mind responding something like this on the adoption call on the mailing list?\r\n\r\nAs I said in my message, I would normally send such a message, but because you asked! Thank you for being so encouraging! I will keep you posted on progress of the implementation!",
+          "createdAt": "2025-02-12T18:29:59Z",
+          "updatedAt": "2025-02-12T18:29:59Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86bcJZ6",
+          "commit": {
+            "abbreviatedOid": "a2c5b08"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-11T07:00:01Z",
+          "updatedAt": "2025-02-11T07:00:01Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "id": "PR_kwDOKhxVW86KwMt7",
+      "title": "Update version in github action scripts",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/38",
+      "state": "CLOSED",
+      "author": "huitema",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Github insists that version 3 of actions/upload-artifact is now obsolete, so changing that.",
+      "createdAt": "2025-02-11T07:07:58Z",
+      "updatedAt": "2025-02-13T03:15:25Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2c8ff0314d8e1fb2240d810a6d85648ab3e680c7",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "github-version",
+      "headRefOid": "043b3ef99ba84c3d7c675084a45490d53ef9dd75",
+      "closedAt": "2025-02-13T01:14:02Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 42,
+      "id": "PR_kwDOKhxVW86LCC7o",
+      "title": "ci: update workflows",
+      "url": "https://github.com/marten-seemann/draft-seemann-quic-address-discovery/pull/42",
+      "state": "MERGED",
+      "author": "marten-seemann",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Done by running `make update`, and discarding some of the nonsensical changes (like removing the README, what's that about?).\r\n\r\nCloses #38.",
+      "createdAt": "2025-02-13T00:24:07Z",
+      "updatedAt": "2025-02-13T01:14:01Z",
+      "baseRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "baseRefName": "main",
+      "baseRefOid": "2c8ff0314d8e1fb2240d810a6d85648ab3e680c7",
+      "headRepository": "marten-seemann/draft-seemann-quic-address-discovery",
+      "headRefName": "update-template",
+      "headRefOid": "c182d9836f162124a062cbeeb49a8d4d94fb29f9",
+      "closedAt": "2025-02-13T01:14:01Z",
+      "mergedAt": "2025-02-13T01:14:01Z",
+      "mergedBy": "huitema",
+      "mergeCommit": {
+        "oid": "f72a78189d6220791bfc320865153cabf235a919"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKhxVW86byDzD",
+          "commit": {
+            "abbreviatedOid": "c182d98"
+          },
+          "author": "huitema",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "Looks good. More systematic than upgrading version numbers by hand!",
+          "createdAt": "2025-02-13T01:13:50Z",
+          "updatedAt": "2025-02-13T01:13:50Z",
           "comments": []
         }
       ]
