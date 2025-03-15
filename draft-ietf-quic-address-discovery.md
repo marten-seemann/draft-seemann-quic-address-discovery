@@ -193,7 +193,7 @@ that the peer will not receive the OBSERVED_ADDRESS frames if the
 addresses are not valid, but this does not reduce the number of
 packets sent over the network.
 The attack also has the effect of causing spurious
-detection NAT rebinding, and is a variant of the replacement of addresses
+detection of NAT rebinding, and is a variant of the replacement of addresses
 of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
 QUIC implementations are expected to have sufficient
 protection against spurious NAT rebinding to limit the incidental traffic
