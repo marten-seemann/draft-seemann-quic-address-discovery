@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-03-18T00:38:06.184059+00:00",
+  "timestamp": "2025-03-20T00:37:56.971789+00:00",
   "repo": "quicwg/address-discovery",
   "labels": [
     {
@@ -763,7 +763,7 @@
       "labels": [],
       "body": "I like the design overall, but I find the transport parameter needlessly complex.\n\nHere's a simpler design proposal:\n\n0. The transport parameter is made empty.\n1. Endpoints advertise the transport parameter if they understand the transport parameter AND they want to receive the frame.\n2. Endpoints can send the frame if their peer sends the transport parameter.\n\nThat's it.\n\nLooking at the existing proposal:\n\n* A value of 0 might as well not be signaled at all.\n* A value of 1 and 2 both are achieved by the above proposal by including the transport parameter.\n* The aspect of 1 where an endpoint is not willing to send the frame is achieved by not sending the frame.\n\nI understand that endpoints might want to know in advance whether a peer is going to send the frame to them.  The design I propose doesn't achieve that.  Receiving the frame does.  If endpoints that are willing to send the frame send the frame (which can be done as soon as application data keys are available) that uncertainty goes away.",
       "createdAt": "2025-02-12T01:49:56Z",
-      "updatedAt": "2025-02-15T07:26:32Z",
+      "updatedAt": "2025-03-19T06:53:21Z",
       "closedAt": null,
       "comments": [
         {
@@ -814,6 +814,13 @@
           "body": "I did not find that overly complex. Here is the actual code in picoquic:\n~~~\n                case picoquic_tp_address_discovery: {\n                    uint64_t address_discovery_mode =\n                        picoquic_transport_param_varint_decode(cnx, bytes + byte_index, extension_length, &ret);\n                    if (ret == 0) {\n                        if (address_discovery_mode > 2) {\n                            ret = picoquic_connection_error_ex(cnx, PICOQUIC_TRANSPORT_PARAMETER_ERROR, 0, \"Address discovery parameter\");\n                        }\n                        else {\n                            /* After doing +1, we get the following:\n                            * address_discovery_mode == 0: nothing goes (TP is absent)\n                            * address_discovery_mode == 1: send only (TP value 0)\n                            * address_discovery_mode == 2: receive only (TP value 1)\n                            * address_discovery_mode == 3: both (TP value 2)\n                            */\n                            cnx->remote_parameters.address_discovery_mode = (int)(address_discovery_mode + 1);\n                            cnx->is_address_discovery_provider = ((cnx->remote_parameters.address_discovery_mode & 2) != 0 &&\n                                (cnx->local_parameters.address_discovery_mode & 1) != 0);\n                            cnx->is_address_discovery_receiver = ((cnx->remote_parameters.address_discovery_mode & 1) != 0 &&\n                                (cnx->local_parameters.address_discovery_mode & 2) != 0);\n                        }\n                    }\n                    break;\n                }\n~~~\nBut yes, a boolean is simpler. See for example the equivalent code for enabling greasing of the Quic bit:\n~~~\n                case picoquic_tp_grease_quic_bit:\n                    if (extension_length != 0) {\n                        ret = picoquic_connection_error_ex(cnx, PICOQUIC_TRANSPORT_PARAMETER_ERROR, 0, \"Grease TP\");\n                    }\n                    else {\n                        cnx->remote_parameters.do_grease_quic_bit = 1;\n                    }\n                    break;\n~~~",
           "createdAt": "2025-02-15T07:26:31Z",
           "updatedAt": "2025-02-15T07:26:31Z"
+        },
+        {
+          "author": "marten-seemann",
+          "authorAssociation": "COLLABORATOR",
+          "body": "IETF 122:\n* @kazuho: existing mechanism alleviates privacy concerns when deployed in data center environments\n* @mirjak: double-check that the draft doesn't call this negotiation, since it's a declaration\n\nNo desire in the room to change the mechanism.",
+          "createdAt": "2025-03-19T06:53:20Z",
+          "updatedAt": "2025-03-19T06:53:20Z"
         }
       ]
     }
