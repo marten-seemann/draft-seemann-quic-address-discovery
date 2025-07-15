@@ -5,12 +5,12 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 15 August 2025                             Private Octopus Inc.
-                                                        11 February 2025
+Expires: 16 January 2026                            Private Octopus Inc.
+                                                            15 July 2025
 
 
                          QUIC Address Discovery
-              draft-seemann-quic-address-discovery-latest
+                draft-ietf-quic-address-discovery-latest
 
 Abstract
 
@@ -18,18 +18,17 @@ Abstract
    information about their network situation.  They neither know their
    external IP address and port, nor do they know if they are directly
    connected to the internet or if they are behind a NAT.  This QUIC
-   extension allows nodes to determine their public IP address and port
-   for any QUIC path.
+   extension allows nodes to determine their reflexive IP address and
+   port for any QUIC path.
 
 About This Document
 
    This note is to be removed before publishing as an RFC.
 
-   The latest revision of this draft can be found at https://marten-
-   seemann.github.io/draft-seemann-quic-address-discovery/draft-seemann-
-   quic-address-discovery.html.  Status information for this document
-   may be found at https://datatracker.ietf.org/doc/draft-seemann-quic-
-   address-discovery/.
+   The latest revision of this draft can be found at
+   https://quicwg.github.io/address-discovery/draft-ietf-quic-address-
+   discovery.html.  Status information for this document may be found at
+   https://datatracker.ietf.org/doc/draft-ietf-quic-address-discovery/.
 
    Discussion of this document takes place on the QUIC Working Group
    mailing list (mailto:quic@ietf.org), which is archived at
@@ -37,8 +36,7 @@ About This Document
    https://www.ietf.org/mailman/listinfo/quic/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/marten-seemann/draft-seemann-quic-address-
-   discovery.
+   https://github.com/quicwg/address-discovery.
 
 Status of This Memo
 
@@ -55,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 15 August 2025.
+   This Internet-Draft will expire on 16 January 2026.
 
 Copyright Notice
 
@@ -162,10 +160,10 @@ Table of Contents
 
    Sequence Number:  A variable-length integer specifying the sequence
       number assigned for this OBSERVED_ADDRESS frame.  The sequence
-      number MUST be monotonically increasing for OBSERVED_ADDRESS frame
-      in the same connection.  Frames may be received out of order.  A
-      peer SHOULD ignore an incoming OBSERVED_ADDRESS frame if it
-      previously received another OBSERVED_ADDRESS frame for the same
+      number MUST be monotonically increasing for OBSERVED_ADDRESS
+      frames in the same connection.  Frames may be received out of
+      order.  A peer SHOULD ignore an incoming OBSERVED_ADDRESS frame if
+      it previously received another OBSERVED_ADDRESS frame for the same
       path with a Sequence Number equal to or higher than the sequence
       number of the incoming frame.
 
@@ -286,7 +284,7 @@ Table of Contents
 Acknowledgments
 
    Unbeknownst to the authors, the idea of moving address discovery into
-   QUIC was conveived of before in [I-D.pauly-quic-address-extension].
+   QUIC was conceived of before in [I-D.pauly-quic-address-extension].
 
 Authors' Addresses
 
