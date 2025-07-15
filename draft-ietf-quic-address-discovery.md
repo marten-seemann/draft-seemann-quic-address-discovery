@@ -62,7 +62,7 @@ advantages:
 
 1. STUN encryption relies on shared keys, which have to be provisioned.
    Absent such provisioning, STUN traffic is unencrypted
-   QUIC provides encryption by default, using TLS 1.3. 
+   QUIC provides encryption by default, using TLS 1.3.
 2. When unencrypted, STUN traffic can be observed and modified by on-path
    observers. By moving address discovery into QUIC's encrypted envelope it
    becomes invisible to observers.
