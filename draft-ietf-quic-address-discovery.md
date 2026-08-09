@@ -46,7 +46,7 @@ informative:
 Unless they have out-of-band knowledge, QUIC endpoints have no information about
 their network situation. They neither know their external IP address and port,
 nor do they know if they are directly connected to the internet or if they are
-behind a NAT. This QUIC extension allows nodes to determine their public IP
+behind a NAT. This QUIC extension allows nodes to determine their reflexive IP
 address and port for any QUIC path.
 
 
