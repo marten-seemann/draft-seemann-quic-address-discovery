@@ -108,7 +108,7 @@ this extension or change the value on the resumed connection.
 
 This extension defines the OBSERVED_ADDRESS frame.
 
-## OBSERVED_ADDRESS
+## OBSERVED_ADDRESS {#observed-address}
 
 ~~~
 OBSERVED_ADDRESS Frame {
@@ -210,7 +210,53 @@ spurious OBSERVED_ADDRESS frames.
 
 # IANA Considerations
 
-TODO: fill out registration request for the transport parameter and frame types
+## QUIC Transport Parameter
+
+This document registers the address_discovery transport parameter in the
+"QUIC Transport Parameters" registry established in
+{{Section 22.3 of RFC9000}}. The following fields are registered:
+
+Value:
+: 0x9f81a176
+
+Parameter Name:
+: address_discovery
+
+Status:
+: permanent
+
+Specification:
+: {{negotiate-extension}}
+
+Change Controller:
+: IETF (iesg@ietf.org)
+
+Contact:
+: QUIC Working Group (quic@ietf.org)
+
+## QUIC Frame Types
+
+This document registers a new range in the "QUIC Frame Types" registry
+established in {{Section 22.4 of RFC9000}}.  The following fields are
+registered:
+
+Value:
+: 0x9f81a6-0x9f81a7
+
+Frame Type Name:
+: OBSERVED_ADDRESS
+
+Status:
+: permanent
+
+Specification:
+: {{observed-address}}
+
+Change Controller:
+: IETF (iesg@ietf.org)
+
+Contact:
+: QUIC Working Group (quic@ietf.org)
 
 --- back
 
