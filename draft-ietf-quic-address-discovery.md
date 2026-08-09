@@ -60,13 +60,21 @@ by asking a remote server to report the observed source address. While the QUIC
 packets, moving address discovery into the QUIC layer has a number of
 advantages:
 
-1. STUN traffic is unencrypted, and can be observed and modified by on-path
+1. STUN encryption relies on shared keys, which have to be provisioned.
+   Absent such provisioning, STUN traffic is unencrypted
+   QUIC provides encryption by default, using TLS 1.3.
+2. When unencrypted, STUN traffic can be observed and modified by on-path
    observers. By moving address discovery into QUIC's encrypted envelope it
    becomes invisible to observers.
-2. When located behind a load balancer, QUIC packets may be routed based on the
+3. STUN packet format is designed to facilitate multiplexing STUN and
+   other protocols on the same IP address and port number (see {{?RFC7983}}).
+   That property can be used by observers to detect use of STUN and infer
+   use of peer-to-peer communications. In contrast, address discovery
+   using QUIC does not "stick out".
+4. When located behind a load balancer, QUIC packets may be routed based on the
    QUIC connection ID. Depending on the architecture, not using STUN might
    simplify the routing logic.
-3. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
+5. If QUIC traffic doesn't need to be demultiplexed from STUN traffic,
    implementations can enable QUIC bit greasing ({{?RFC9287}}).
 
 # Conventions and Definitions
