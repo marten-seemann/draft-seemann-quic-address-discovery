@@ -44,8 +44,8 @@ informative:
 --- abstract
 
 Unless they have out-of-band knowledge, QUIC endpoints have no information about
-their network situation. They neither know their external IP address and port,
-nor do they know if they are directly connected to the internet or if they are
+their network situation. They do not know their external IP address and port,
+nor whether they are directly connected to the Internet or whether they are
 behind a NAT. This QUIC extension allows nodes to determine their reflexive IP
 address and port for any QUIC path.
 
@@ -56,20 +56,20 @@ address and port for any QUIC path.
 
 STUN ({{!RFC8489}}) allows nodes to discover their reflexive transport address
 by asking a remote server to report the observed source address. While the QUIC
-({{!RFC9000}}) packet header was designed to allow demultiplexing from STUN
-packets, moving address discovery into the QUIC layer has a number of
-advantages:
+({{!RFC9000}}) packet header was designed to allow QUIC packets to be
+demultiplexed from STUN packets, moving address discovery into the QUIC layer
+has a number of advantages:
 
 1. STUN encryption relies on shared keys, which have to be provisioned.
-   Absent such provisioning, STUN traffic is unencrypted
+   Absent such provisioning, STUN traffic is unencrypted.
    QUIC provides encryption by default, using TLS 1.3.
 2. When unencrypted, STUN traffic can be observed and modified by on-path
-   observers. By moving address discovery into QUIC's encrypted envelope it
+   observers. By moving address discovery into QUIC's encrypted envelope, it
    becomes invisible to observers.
-3. STUN packet format is designed to facilitate multiplexing STUN and
+3. The STUN packet format is designed to facilitate multiplexing STUN with
    other protocols on the same IP address and port number (see {{?RFC7983}}).
-   That property can be used by observers to detect use of STUN and infer
-   use of peer-to-peer communications. In contrast, address discovery
+   That property can be used by observers to detect the use of STUN and infer
+   the use of peer-to-peer communications. In contrast, address discovery
    using QUIC does not "stick out".
 4. When located behind a load balancer, QUIC packets may be routed based on the
    QUIC connection ID. Depending on the architecture, not using STUN might
@@ -83,7 +83,7 @@ advantages:
 
 # Negotiating Extension Use {#negotiate-extension}
 
-Endpoints advertise their support of the extension by sending the
+Endpoints advertise their support for the extension by sending the
 address_discovery (0x9f81a176) transport parameter ({{Section 7.4 of RFC9000}})
 with a variable-length integer value. The value determines the behavior with
 respect to address discovery:
@@ -96,7 +96,7 @@ respect to address discovery:
   to provide address observations.
 
 Implementations that understand this transport parameter MUST treat the receipt
-of any other value than these as a connection error of type
+of any value other than 0, 1, or 2 as a connection error of type
 TRANSPORT_PARAMETER_ERROR.
 
 When using 0-RTT, both endpoints MUST remember the value of this transport
@@ -108,7 +108,7 @@ this extension or change the value on the resumed connection.
 
 This extension defines the OBSERVED_ADDRESS frame.
 
-## OBSERVED_ADDRESS
+## OBSERVED_ADDRESS {#observed-address}
 
 ~~~
 OBSERVED_ADDRESS Frame {
@@ -123,12 +123,12 @@ OBSERVED_ADDRESS Frame {
 The OBSERVED_ADDRESS frame contains the following fields:
 
 Sequence Number:
-: A variable-length integer specifying the sequence number assigned for
-  this OBSERVED_ADDRESS frame. The sequence
-  number MUST be monotonically increasing for OBSERVED_ADDRESS frames in the same connection.
+: A variable-length integer specifying the sequence number assigned to
+  this OBSERVED_ADDRESS frame. The sequence number MUST be monotonically
+  increasing for OBSERVED_ADDRESS frames on the same connection.
   Frames may be received out of order. A peer SHOULD ignore an incoming
-  OBSERVED_ADDRESS frame if it previously received another OBSERVED_ADDRESS frame
-  for the same path with a Sequence Number equal to or higher than the
+  OBSERVED_ADDRESS frame if it has previously received another OBSERVED_ADDRESS
+  frame for the same path with a Sequence Number equal to or higher than the
   sequence number of the incoming frame.
 
 IPv4:
@@ -145,10 +145,11 @@ Port:
 
 : The port number, in network byte order.
 
-This frame MUST only appear in the application data packet
+This frame MUST appear only in the application data packet
 number space. It is a "probing frame" as defined in {{Section 9.1 of RFC9000}}.
-OBSERVED_ADDRESS frames are ack-eliciting, and SHOULD be retransmitted if lost.
-Retransmissions MUST happen on the same path as the original frame was sent on.
+OBSERVED_ADDRESS frames are ack-eliciting and SHOULD be retransmitted if lost.
+Retransmissions MUST happen on the same path on which the original frame was
+sent.
 
 An endpoint MUST NOT send an OBSERVED_ADDRESS frame to a node that did not
 request the receipt of address observations as described in
@@ -158,20 +159,20 @@ receives an OBSERVED_ADDRESS frame.
 
 # Address Discovery
 
-An endpoint that negotiated (see {{negotiate-extension}}) this extension and
-offered to provide address observations to the peer MUST send an
+An endpoint that has negotiated this extension (see {{negotiate-extension}})
+and offered to provide address observations to the peer MUST send an
 OBSERVED_ADDRESS frame on every new path. This also applies to the path used for
 the QUIC handshake. The OBSERVED_ADDRESS frame SHOULD be sent as early as
 possible.
 
 For paths used after completion of the handshake, endpoints SHOULD bundle the
-OBSERVED_ADDRESS frame with probing packets. This is possible, since the frame
+OBSERVED_ADDRESS frame with probing packets. This is possible since the frame
 is defined to be a probing frame ({{Section 8.2 of RFC9000}}).
 
 Additionally, the sender SHOULD send an OBSERVED_ADDRESS frame when it detects a
-change in the remote address on an existing path. This could be indicative of a
+change in the remote address on an existing path. This could indicate a
 NAT rebinding. However, the sender MAY limit the rate at which OBSERVED_ADDRESS
-frames are produced, to mitigate the spoofed packets attack described in
+frames are produced to mitigate the spoofed-packet attack described in
 {{responder-side-security}}.
 
 # Security Considerations
@@ -179,10 +180,10 @@ frames are produced, to mitigate the spoofed packets attack described in
 ## On the Requester Side
 
 In general, nodes cannot be trusted to report the correct address in
-OBSERVED_ADDRESS frames. If possible, endpoints might decide to only request
-address observations when connecting to trusted peers, or if that is not
-possible, define some validation logic (e.g. by asking multiple untrusted peers
-and observing if the responses are consistent). This logic is out of scope for
+OBSERVED_ADDRESS frames. If possible, endpoints might decide to request address
+observations only when connecting to trusted peers. Otherwise, they can define
+some validation logic (for example, by asking multiple untrusted peers and
+checking whether the responses are consistent). This logic is out of scope for
 this document.
 
 ## On the Responder Side {#responder-side-security}
@@ -193,20 +194,21 @@ the internal network. In these cases, the node SHOULD NOT offer to provide
 address observations.
 
 On-path attackers could capture packets sent from the requester to the
-responder, and resend them from a spoofed source address. If done repeatedly,
-these spoofed packets could trigger the sending of a large number of OBSERVED_ADDRESS frames.
-The recommendation to only include OBSERVED_ADDRESS frames in packets
+responder and resend them from a spoofed source address. If done repeatedly,
+these spoofed packets could trigger the sending of a large number of
+OBSERVED_ADDRESS frames.
+The recommendation to include OBSERVED_ADDRESS frames only in packets
 sent on the same path over which the address was observed ensures
 that the peer will not receive the OBSERVED_ADDRESS frames if the
 addresses are not valid, but this does not reduce the number of
 packets sent over the network.
-The attack also has the effect of causing spurious
-detection of NAT rebinding, and is a variant of the replacement of addresses
-of packets mentioned in {{Section 21.1.1.3 of RFC9000}}.
+The attack can also cause spurious detection of NAT rebinding and is a variant
+of the packet address replacement
+described in {{Section 21.1.1.3 of RFC9000}}.
 QUIC implementations are expected to have sufficient
 protection against spurious NAT rebinding to limit the incidental traffic
-caused by such attacks. The same protection logic SHOULD be used to prevent sending of a large number of
-spurious OBSERVED_ADDRESS frames.
+caused by such attacks. The same protection logic SHOULD be used to prevent the
+sending of a large number of spurious OBSERVED_ADDRESS frames.
 
 # IANA Considerations
 
@@ -217,5 +219,5 @@ TODO: fill out registration request for the transport parameter and frame types
 # Acknowledgments
 {:numbered="false"}
 
-Unbeknownst to the authors, the idea of moving address discovery into QUIC was
-conceived of before in {{?I-D.pauly-quic-address-extension}}.
+Unbeknownst to the authors, the idea of moving address discovery into QUIC had
+previously been proposed in {{?I-D.pauly-quic-address-extension}}.
