@@ -5,8 +5,8 @@
 QUIC                                                          M. Seemann
 Internet-Draft                                                          
 Intended status: Standards Track                              C. Huitema
-Expires: 5 September 2025                           Private Octopus Inc.
-                                                            4 March 2025
+Expires: 16 February 2027                           Private Octopus Inc.
+                                                          15 August 2026
 
 
                          QUIC Address Discovery
@@ -18,8 +18,8 @@ Abstract
    information about their network situation.  They neither know their
    external IP address and port, nor do they know if they are directly
    connected to the internet or if they are behind a NAT.  This QUIC
-   extension allows nodes to determine their public IP address and port
-   for any QUIC path.
+   extension allows nodes to determine their reflexive IP address and
+   port for any QUIC path.
 
 About This Document
 
@@ -53,11 +53,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 September 2025.
+   This Internet-Draft will expire on 16 February 2027.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -95,15 +95,25 @@ Table of Contents
    allow demultiplexing from STUN packets, moving address discovery into
    the QUIC layer has a number of advantages:
 
-   1.  STUN traffic is unencrypted, and can be observed and modified by
+   1.  STUN encryption relies on shared keys, which have to be
+       provisioned.  Absent such provisioning, STUN traffic is
+       unencrypted QUIC provides encryption by default, using TLS 1.3.
+
+   2.  When unencrypted, STUN traffic can be observed and modified by
        on-path observers.  By moving address discovery into QUIC's
        encrypted envelope it becomes invisible to observers.
 
-   2.  When located behind a load balancer, QUIC packets may be routed
+   3.  STUN packet format is designed to facilitate multiplexing STUN
+       and other protocols on the same IP address and port number (see
+       [RFC7983]).  That property can be used by observers to detect use
+       of STUN and infer use of peer-to-peer communications.  In
+       contrast, address discovery using QUIC does not "stick out".
+
+   4.  When located behind a load balancer, QUIC packets may be routed
        based on the QUIC connection ID.  Depending on the architecture,
        not using STUN might simplify the routing logic.
 
-   3.  If QUIC traffic doesn't need to be demultiplexed from STUN
+   5.  If QUIC traffic doesn't need to be demultiplexed from STUN
        traffic, implementations can enable QUIC bit greasing
        ([RFC9287]).
 
@@ -232,7 +242,7 @@ Table of Contents
    which the address was observed ensures that the peer will not receive
    the OBSERVED_ADDRESS frames if the addresses are not valid, but this
    does not reduce the number of packets sent over the network.  The
-   attack also has the effect of causing spurious detection NAT
+   attack also has the effect of causing spurious detection of NAT
    rebinding, and is a variant of the replacement of addresses of
    packets mentioned in Section 21.1.1.3 of [RFC9000].  QUIC
    implementations are expected to have sufficient protection against
@@ -276,6 +286,12 @@ Table of Contents
               quic-address-extension-00, 11 March 2019,
               <https://datatracker.ietf.org/doc/html/draft-pauly-quic-
               address-extension-00>.
+
+   [RFC7983]  Petit-Huguenin, M. and G. Salgueiro, "Multiplexing Scheme
+              Updates for Secure Real-time Transport Protocol (SRTP)
+              Extension for Datagram Transport Layer Security (DTLS)",
+              RFC 7983, DOI 10.17487/RFC7983, September 2016,
+              <https://www.rfc-editor.org/rfc/rfc7983>.
 
    [RFC9287]  Thomson, M., "Greasing the QUIC Bit", RFC 9287,
               DOI 10.17487/RFC9287, August 2022,
